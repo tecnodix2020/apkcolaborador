@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, Button, Image, TouchableWithoutFeedback } from 'react-native';
+import { Dimensions, StyleSheet, View, Text, Button, Image, TouchableWithoutFeedback } from 'react-native';
 
 export default function Home({ navigation }) {
     
@@ -9,12 +9,9 @@ export default function Home({ navigation }) {
 
     return (
       <View style={[styles.body]}>
-        <TouchableWithoutFeedback onPress={pressHandler} >
           <View style={[styles.placeholderLogo]}>
             <Image style={styles.imgLogo} source={require('../img/logo.png')} />
-            <Text style={[styles.txtLogo]}>CHAMAR</Text>
           </View>
-        </TouchableWithoutFeedback>
       </View>
   )
 }
@@ -32,21 +29,18 @@ const styles = StyleSheet.create({
   placeholderLogo: {
     backgroundColor: '#FFFFFF',
     flex: 1,
-    width: 300,
-    height: 300,
-    borderRadius: 300/2,
+    width: Dimensions.get('window').width * 0.5,
+    height: Dimensions.get('window').width * 0.5,
+    borderRadius: Math.round(Dimensions.get('window').width + Dimensions.get('window').height) / 2,
     justifyContent: 'center',
     alignItems: 'center',
     alignContent: 'center',
-    margin: '12%'
+    marginTop: '20%',
+    marginBottom: '80%',
   },
   imgLogo: {
-    width: 170,
-    height: 150,
+    width: 150,
+    height: 130,
     margin: 10,
   },
-  txtLogo: {
-    fontSize: 35,
-    color: 'red',
-  }
 });
