@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "662508850411",
+    "firebase_url": "https://apkcolaborador.firebaseio.com",
+    "project_id": "apkcolaborador",
+    "storage_bucket": "apkcolaborador.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:662508850411:android:0f1602c9b976f8c49842ae",
+        "android_client_info": {
+          "package_name": "com.secretariavirtualtotem"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "662508850411-2pqbtq2d017k9pcmbl8pmjdmbtgnpglf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwDjFB4nsAj6JFcyK7pogG6sXi47zR2KI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "662508850411-2pqbtq2d017k9pcmbl8pmjdmbtgnpglf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
