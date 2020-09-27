@@ -1,34 +1,42 @@
 {
   "project_info": {
-    "project_number": "662508850411",
-    "firebase_url": "https://apkcolaborador.firebaseio.com",
-    "project_id": "apkcolaborador",
-    "storage_bucket": "apkcolaborador.appspot.com"
+    "project_number": "488732940092",
+    "firebase_url": "https://apkcolaborador-16b80.firebaseio.com",
+    "project_id": "apkcolaborador-16b80",
+    "storage_bucket": "apkcolaborador-16b80.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:662508850411:android:0f1602c9b976f8c49842ae",
+        "mobilesdk_app_id": "1:488732940092:android:15b957ed1ab73c8b723039",
         "android_client_info": {
-          "package_name": "com.secretariavirtualtotem"
+          "package_name": "com.apkcolaborador"
         }
       },
       "oauth_client": [
         {
-          "client_id": "662508850411-2pqbtq2d017k9pcmbl8pmjdmbtgnpglf.apps.googleusercontent.com",
+          "client_id": "488732940092-s3jjef2d687pjo92ujrjn9avugggb70c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.apkcolaborador",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "488732940092-u7nkoupa1fi9lsq34jqk8kpfemg77j6n.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAwDjFB4nsAj6JFcyK7pogG6sXi47zR2KI"
+          "current_key": "AIzaSyDWOhxbvE3bDHLv8ymwRauWJOEM2EFkZ8I"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "662508850411-2pqbtq2d017k9pcmbl8pmjdmbtgnpglf.apps.googleusercontent.com",
+              "client_id": "488732940092-u7nkoupa1fi9lsq34jqk8kpfemg77j6n.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

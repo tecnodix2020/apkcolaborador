@@ -44,8 +44,8 @@ def flipper_post_install(installer)
   end
 end
 
-target 'SecretariaVirtualTotem' do
-  # Pods for SecretariaVirtualTotem
+target 'ApkColaborador' do
+  # Pods for ApkColaborador
   pod 'FBLazyVector', :path => "../node_modules/react-native/Libraries/FBLazyVector"
   pod 'FBReactNativeSpec', :path => "../node_modules/react-native/Libraries/FBReactNativeSpec"
   pod 'RCTRequired', :path => "../node_modules/react-native/Libraries/RCTRequired"
@@ -79,7 +79,7 @@ target 'SecretariaVirtualTotem' do
 
   pod 'react-native-orientation-locker', :path => '../node_modules/react-native-orientation-locker'
 
-  target 'SecretariaVirtualTotemTests' do
+  target 'ApkColaboradorTests' do
     inherit! :complete
     # Pods for testing
   end
@@ -96,10 +96,10 @@ target 'SecretariaVirtualTotem' do
   end
 end
 
-target 'SecretariaVirtualTotem-tvOS' do
-  # Pods for SecretariaVirtualTotem-tvOS
+target 'ApkColaborador-tvOS' do
+  # Pods for ApkColaborador-tvOS
 
-  target 'SecretariaVirtualTotem-tvOSTests' do
+  target 'ApkColaborador-tvOSTests' do
     inherit! :search_paths
     # Pods for testing
   end
