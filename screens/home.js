@@ -1,5 +1,9 @@
 import React from 'react';
 import { Dimensions, StyleSheet, View, Text, Button, Image, TouchableWithoutFeedback } from 'react-native';
+import {
+ heightPercentageToDP as hp,
+ widthPercentageToDP as wp,
+} from 'react-native-responsive-screen';
 
 export default function Home({ navigation }) {
     
@@ -26,8 +30,8 @@ const styles = StyleSheet.create({
   },
   placeholderLogo: {
     backgroundColor: '#FFFFFF',
-    width: Dimensions.get('window').width * 0.35,
-    height: Dimensions.get('window').width * 0.35,
+    width: Dimensions.get('window').width * 0.50,
+    height: Dimensions.get('window').width * 0.50,
     borderRadius: Math.round(Dimensions.get('window').width + Dimensions.get('window').height) / 2,
     justifyContent: 'center',
     alignItems: 'center',
@@ -35,8 +39,8 @@ const styles = StyleSheet.create({
     marginTop: 60,
   },
   imgLogo: {
-    width: 140,
-    height: 120,
+    width: wp(35),
+    height: hp(20),
     margin: 10,
   },
 });
