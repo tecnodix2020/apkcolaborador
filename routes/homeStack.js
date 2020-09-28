@@ -1,6 +1,7 @@
 import { createStackNavigator } from 'react-navigation-stack';
 import { createAppContainer } from 'react-navigation';
 import Home from '../screens/home';
+import Option from '../screens/option';
 
 const screens = {
     Home: {
@@ -8,6 +9,12 @@ const screens = {
         navigationOptions: {
             title: 'TELA INICIAL'
         },
+    },
+    Option: {
+        screen: Option,
+        navigationOptions: {
+            title: 'OPÇÕES DO COLABORADOR'
+        }
     },
 }
 
