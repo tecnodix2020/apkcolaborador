@@ -1,5 +1,5 @@
 import React from 'react';
-import { PixelRatio, Dimensions, StyleSheet, View, Text, Button, Image, TouchableWithoutFeedback } from 'react-native';
+import { TouchableOpacity, PixelRatio, Dimensions, StyleSheet, View, Text, Button, Image, TouchableWithoutFeedback } from 'react-native';
 import {
  heightPercentageToDP as hp,
  widthPercentageToDP as wp,
@@ -8,6 +8,14 @@ import { FAB } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 export default function Option({ navigation }) {
+
+    const pressHandler1 = () => {
+        navigation.navigate('FormGuest');
+    }
+
+    const pressHandler2 = () => {
+        navigation.navigate('FormDelivery');
+    }
 
     return (
         <View>
@@ -18,7 +26,12 @@ export default function Option({ navigation }) {
                 icon="add"
                 onPress={() => console.log('Pressed')}
             />
-            
+            <TouchableOpacity style={styles.buttonSubmit} onPress={pressHandler1}>
+              <Text style={styles.submitText}>Cadastrar Visitante</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.buttonSubmit} onPress={pressHandler2}>
+              <Text style={styles.submitText}>Cadastrar Entrega</Text>
+            </TouchableOpacity>
           </View>
         </View>
     );
@@ -36,4 +49,17 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
   },
+  submitText: {
+    fontSize: wp(4.1),
+    color: 'grey',
+    fontWeight: 'bold',
+  },
+  buttonSubmit: {
+    backgroundColor: 'lime',
+    width: wp(45),
+    height: hp(10),
+    padding: wp(2),
+    marginTop: wp(15),
+    marginLeft: wp(15),
+  }
 });

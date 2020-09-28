@@ -2,6 +2,8 @@ import { createStackNavigator } from 'react-navigation-stack';
 import { createAppContainer } from 'react-navigation';
 import Home from '../screens/home';
 import Option from '../screens/option';
+import FormGuest from '../screens/formguest';
+import FormDelivery from '../screens/formdelivery';
 
 const screens = {
     Home: {
@@ -12,6 +14,18 @@ const screens = {
     },
     Option: {
         screen: Option,
+        navigationOptions: {
+            title: 'OPÇÕES DO COLABORADOR'
+        }
+    },
+    FormGuest: {
+        screen: FormGuest,
+        navigationOptions: {
+            title: 'OPÇÕES DO COLABORADOR'
+        }
+    },
+    FormDelivery: {
+        screen: FormDelivery,
         navigationOptions: {
             title: 'OPÇÕES DO COLABORADOR'
         }
