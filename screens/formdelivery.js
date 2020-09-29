@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableOpacity, PixelRatio, Dimensions, StyleSheet, View, Text, Button, Image, TouchableWithoutFeedback } from 'react-native';
+import { TouchableOpacity, PixelRatio, Dimensions, StyleSheet, View, TextInput, Text, Button, Image, TouchableWithoutFeedback } from 'react-native';
 import {
  heightPercentageToDP as hp,
  widthPercentageToDP as wp,
@@ -7,32 +7,44 @@ import {
 import { FAB } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-export default function FormDelivery({ navigation }) {
+import Input from '../components/Input';
 
-    return (
-        <View>
-          <View style={styles.body}>
-            <FAB
-                style={styles.fab}
-                small
-                icon="add"
-                onPress={() => console.log('Pressed')}
-            />
-            </View>
-        </View>
-    );
-}
+import { withFormik } from 'formik';
+import Yup from 'yup';
 
-const styles = StyleSheet.create({
-  body: {
-    width: '100%',
-    height: '100%',
-    backgroundColor: '#50C3F3',
-  },
-  fab: {
-    position: 'absolute',
-    margin: 16,
-    right: 0,
-    bottom: 0,
-  },
-});
+const Form = (props) => (
+  <View>
+      <View>
+        <TextInput
+          value={props.values.email}
+          onChangeText={text => props.setFieldValue('email', text)}
+        />
+
+        <TextInput
+          value={props.values.password}
+          onChangeText={text => props.setFieldValue('password', text)}
+        />
+
+        <Button
+          onPress={props.handleSubmit}
+          title="Salvar"
+        />
+      </View>
+
+      <View>
+        <Input label="Data da Entrega" />
+        <Input label="Pessoa Opcional a receber" />
+        <Input label="Phone" />
+
+      </View>
+  </View>
+);
+
+export default withFormik({
+  mapPropsToValues: () => ({ email: '', password: '' }),
+
+  handleSubmit: (values) => {
+    console.log(values);
+  }
+})(Form);
+

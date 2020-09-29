@@ -23,7 +23,7 @@ export default function Option({ navigation }) {
             <FAB
                 style={styles.fab}
                 small
-                icon="add"
+                icon="plus"
                 onPress={() => console.log('Pressed')}
             />
             <TouchableOpacity style={styles.buttonSubmit} onPress={pressHandler1}>

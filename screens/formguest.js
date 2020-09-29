@@ -7,25 +7,35 @@ import {
 import { FAB } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Ionicons';
 
+import Input from '../components/Input';
+
 import { withFormik } from 'formik';
 import Yup from 'yup';
 
 const Form = (props) => (
   <View>
-    <TextInput
-      value={props.values.email}
-      onChangeText={text => props.setFieldValue('email', text)}
-    />
+      <View>
+        <TextInput
+          value={props.values.email}
+          onChangeText={text => props.setFieldValue('email', text)}
+        />
 
-    <TextInput
-      value={props.values.password}
-      onChangeText={text => props.setFieldValue('password', text)}
-    />
+        <TextInput
+          value={props.values.password}
+          onChangeText={text => props.setFieldValue('password', text)}
+        />
 
-    <Button
-      onPress={props.handleSubmit}
-      title="Salvar"
-    />
+        <Button
+          onPress={props.handleSubmit}
+          title="Salvar"
+        />
+      </View>
+
+      <View>
+        <Input label="Nome do Visitante" />
+        <Input label="Dia da Visita" />
+        <Input label="Pessoa Responsável em caso de ausência" />
+      </View>
   </View>
 );
 
