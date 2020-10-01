@@ -7,6 +7,10 @@ import {
 import { FAB } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Ionicons';
 
+import FlashMessage from "react-native-flash-message";
+import { CardViewWithIcon } from "react-native-simple-card-view";
+import { Divider } from 'react-native-paper';
+
 export default function Option({ navigation }) {
 
     const pressHandler1 = () => {
@@ -17,23 +21,49 @@ export default function Option({ navigation }) {
         navigation.navigate('FormDelivery');
     }
 
+    const miniCardStyle = {
+      shadowColor       : '#000000',
+      shadowOffsetWidth : 2,
+      shadowOffsetHeight: 2,
+      shadowOpacity     : 0.1,
+      hadowRadius      : 5,
+      bgColor           : '#ffffff',
+      padding           : 5,
+      margin            : 5,
+      borderRadius      : 3,
+      elevation         : 3,
+      width             : (Dimensions.get("window").width / 2) - 10
+    }
+
     return (
         <View>
           <View style={styles.body}>
-            <FAB
-                style={styles.fab}
-                small
-                icon="plus"
-                onPress={() => console.log('Pressed')}
-            />
             <TouchableOpacity style={styles.buttonSubmit} onPress={pressHandler1}>
               <Text style={styles.submitText}>Cadastrar Visitante</Text>
             </TouchableOpacity>
+
+            <Divider />
+
             <TouchableOpacity style={styles.buttonSubmit} onPress={pressHandler2}>
               <Text style={styles.submitText}>Cadastrar Entrega</Text>
             </TouchableOpacity>
+
+            <Divider />
+
+            <CardViewWithIcon
+              withBackground={ false }
+              androidIcon={ 'md-jet' }
+              iosIcon={ 'ios-jet-outlin' }
+              iconHeight={ wp(45) }
+              iconColor={ '#ff0000' }
+              title={ 'Notificações' }
+              contentFontSize={ 10 }
+              titleFontSize={ wp(3.5) }
+              //style={ miniCardStyle }
+            />
           </View>
-        </View>
+
+       </View>
     );
 }
 
@@ -43,23 +73,19 @@ const styles = StyleSheet.create({
     height: '100%',
     backgroundColor: '#50C3F3',
   },
-  fab: {
-    position: 'absolute',
-    margin: 16,
-    right: 0,
-    bottom: 0,
-  },
   submitText: {
     fontSize: wp(4.1),
-    color: 'grey',
     fontWeight: 'bold',
   },
   buttonSubmit: {
-    backgroundColor: 'lime',
-    width: wp(45),
-    height: hp(10),
+    backgroundColor: 'lightgreen',
+    width: wp(25),
+    height: hp(12),
     padding: wp(2),
-    marginTop: wp(15),
-    marginLeft: wp(15),
+    marginTop: wp(10),
+    marginLeft: wp(10),
+    textShadowColor: 'rgba(1, 0, 0, 0.75)',
+    textShadowOffset: {width: -2, height: 2},
+    textShadowRadius: 10
   }
 });

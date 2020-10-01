@@ -13,17 +13,11 @@ import { withFormik } from 'formik';
 import Yup from 'yup';
 
 const Form = (props) => (
-  <View>
+  <View style={styles.body}>
       <View>
-        <TextInput
-          value={props.values.email}
-          onChangeText={text => props.setFieldValue('email', text)}
-        />
-
-        <TextInput
-          value={props.values.password}
-          onChangeText={text => props.setFieldValue('password', text)}
-        />
+        <Input label="Data da Entrega" />
+        <Input label="Colaborador Opcional a Receber" />
+        <Input label="Telefone" />
 
         <Button
           onPress={props.handleSubmit}
@@ -31,20 +25,27 @@ const Form = (props) => (
         />
       </View>
 
-      <View>
-        <Input label="Data da Entrega" />
-        <Input label="Pessoa Opcional a receber" />
-        <Input label="Phone" />
-
-      </View>
+      
   </View>
 );
+
+const styles = StyleSheet.create({
+  body: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+    backgroundColor: '#50C3F3',
+    alignItems: 'center',
+  },
+});
 
 export default withFormik({
   mapPropsToValues: () => ({ email: '', password: '' }),
 
   handleSubmit: (values) => {
-    console.log(values);
+    console.log("values");
   }
 })(Form);
+
+
 

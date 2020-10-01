@@ -1,6 +1,10 @@
 import React from "react";
 import { View, TextInput, StyleSheet, Text } from "react-native";
 import PropTypes from "prop-types";
+import {
+ heightPercentageToDP as hp,
+ widthPercentageToDP as wp,
+} from 'react-native-responsive-screen';
 
 const Input = ({
   label,
@@ -25,8 +29,12 @@ const styles = StyleSheet.create({
   },
   input: {
     borderBottomWidth: 1,
-    minHeight: 40,
-    padding: 10,
+    minHeight: 10,
+    padding: 5,
+    backgroundColor: 'white',
+    width: wp(90),
+    borderRadius: wp(1.8),
+    fontSize: wp(4.1),
   },
   errorInput: { color: "red", fontSize: 12 },
 });
