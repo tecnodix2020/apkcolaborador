@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import { TouchableOpacity, TextInput, Dimensions, StyleSheet, View, Text, Button, Image, TouchableWithoutFeedback } from 'react-native';
 import {
@@ -7,39 +7,40 @@ import {
 } from 'react-native-responsive-screen';
 import api from '../services/api';
 
+// hook --- nova forma
 export default function Home({ navigation }) {
 
-    state = { email: '', password: '', error: '' };
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
     const handleEmailChange = (email) => {
-      this.setState({ email });
+      setEmail(email);
     };
 
     const handlePasswordChange = (password) => {
-      this.setState({ password });
+      console.log(password);
+      setPassword(password);
     }; 
     
     const pressHandler = () => {
+        
         navigation.navigate('Option');
     }
 
     const handleSignInPress = async () => {
-    if (this.state.email.length === 0 || this.state.password.length === 0) {
-      this.setState({ error: 'Preencha usuário e senha para continuar!' }, () => false);
+    if (email.length === 0 || password.length === 0) {
+      setState({ error: 'Preencha usuário e senha para continuar!' }, () => false);
     } else {
       try {
         const response = await api.post('/auth', {
-          email: this.state.email,
-          password: this.state.password,
+          username: email,
+          password: password,
         });
-          
-        const resetAction = StackActions.reset({
-          index: 0,
-          actions: [
-            navigation.navigate('Option')
-          ],
-        });
-        this.props.navigation.dispatch(resetAction);
+
+        // validar aqui com if se logou certo antes de passar de tela 
+        navigation.navigate('Option')
+
       } catch (_err) {
         this.setState({ error: 'Houve um problema com o login, verifique suas credenciais!' });
       }
@@ -54,28 +55,26 @@ export default function Home({ navigation }) {
 
           <TextInput
             style={styles.inputMail}
-            //value={this.state.email}
-            //onChangeText={this.handleEmailChange}
+            value={email}
+            onChangeText={handleEmailChange}
             placeholder="Email"
             keyboardType="email-address"
             textContentType="emailAddress"
             autoCapitalize="none"
             autoCompleteType="email"
             autoCorrect={false}
-            onChangeText={() => {}}
           />
 
           <TextInput
             style={styles.inputPassword}
-            //value={this.state.password}
-            //onChangeText={this.handlePasswordChange}
+            value={password}
+            onChangeText={handlePasswordChange}
             placeholder="Senha"
             textContentType="password"
             autoCapitalize="none"
             autoCompleteType="password"
             autoCorrect={false}
             secureTextEntry={true}
-            onChangeText={() => {}}
           />
 
           <TouchableOpacity style={styles.buttonSubmit} onPress={pressHandler}>
