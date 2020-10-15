@@ -1,15 +1,26 @@
 import React from 'react';
-import { TouchableOpacity, PixelRatio, Dimensions, StyleSheet, View, Text, Button, Image, TouchableWithoutFeedback } from 'react-native';
+import { useWindowDimensions, TouchableOpacity, PixelRatio, Dimensions, StyleSheet, View, Text, Button, Image, TouchableWithoutFeedback } from 'react-native';
 import {
  heightPercentageToDP as hp,
  widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 import { FAB } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 
 import FlashMessage from "react-native-flash-message";
 import { CardViewWithIcon } from "react-native-simple-card-view";
 import { Divider } from 'react-native-paper';
+
+const Drawer = createDrawerNavigator();
+
+function MyDrawer() {
+      return (
+        <Drawer.Navigator>
+          <Drawer.Screen name="Feed" component={Feed} />
+          <Drawer.Screen name="Article" component={Article} />
+        </Drawer.Navigator>
+      );
 
 export default function Option({ navigation }) {
 
@@ -36,6 +47,8 @@ export default function Option({ navigation }) {
     }
 
     return (
+
+        <MyDrawer />
         <View>
           <View style={styles.body}>
             <TouchableOpacity style={styles.buttonSubmit} onPress={pressHandler1}>

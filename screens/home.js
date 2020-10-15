@@ -1,11 +1,22 @@
 import React, {useState} from 'react';
 import PropTypes from 'prop-types';
-import { TouchableOpacity, TextInput, Dimensions, StyleSheet, View, Text, Button, Image, TouchableWithoutFeedback } from 'react-native';
+import { KeyboardAvoidingView, TouchableOpacity, TextInput, Dimensions, StyleSheet, View, Text, Button, Image, TouchableWithoutFeedback } from 'react-native';
 import {
  heightPercentageToDP as hp,
  widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 import api from '../services/api';
+
+//onPress={Keyboard.dismiss} - para colocar abraçando toda a view
+/*
+https://reactnative.dev/docs/keyboardavoidingview
+
+<KeyboardAvoidingView
+  behavior={Platform.OS == "ios" ? "padding" : "height"}
+  style={styles.container}
+>
+</KeyboardAvoidingView>
+*/
 
 // hook --- nova forma
 export default function Home({ navigation }) {
@@ -48,50 +59,59 @@ export default function Home({ navigation }) {
   };
 
     return (
-      <View style={[styles.body]}>
-          <View style={[styles.placeholderLogo]}>
-            <Image style={styles.imgLogo} source={require('../img/logo.png')} />
-          </View>
 
-          <TextInput
-            style={styles.inputMail}
-            value={email}
-            onChangeText={handleEmailChange}
-            placeholder="Email"
-            keyboardType="email-address"
-            textContentType="emailAddress"
-            autoCapitalize="none"
-            autoCompleteType="email"
-            autoCorrect={false}
-          />
+      <KeyboardAvoidingView
+  behavior={Platform.OS == "ios" ? "padding" : "height"}
+  style={styles.container}
+>
+        <View style={[styles.body]}>
+            <View style={[styles.placeholderLogo]}>
+              <Image style={styles.imgLogo} source={require('../img/logo.png')} />
+            </View>
 
-          <TextInput
-            style={styles.inputPassword}
-            value={password}
-            onChangeText={handlePasswordChange}
-            placeholder="Senha"
-            textContentType="password"
-            autoCapitalize="none"
-            autoCompleteType="password"
-            autoCorrect={false}
-            secureTextEntry={true}
-          />
+            <TextInput
+              style={styles.inputMail}
+              value={email}
+              onChangeText={handleEmailChange}
+              placeholder="Email"
+              keyboardType="email-address"
+              textContentType="emailAddress"
+              autoCapitalize="none"
+              autoCompleteType="email"
+              autoCorrect={false}
+            />
 
-          <TouchableOpacity style={styles.buttonSubmit} onPress={pressHandler}>
-            <Text style={styles.submitText}>Acessar</Text>
-          </TouchableOpacity>
+            <TextInput
+              style={styles.inputPassword}
+              value={password}
+              onChangeText={handlePasswordChange}
+              placeholder="Senha"
+              textContentType="password"
+              autoCapitalize="none"
+              autoCompleteType="password"
+              autoCorrect={false}
+              secureTextEntry={true}
+            />
 
-      </View>
+            <TouchableOpacity style={styles.buttonSubmit} onPress={pressHandler}>
+              <Text style={styles.submitText}>Acessar</Text>
+            </TouchableOpacity>
+        </View>
+      </KeyboardAvoidingView>
   )
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   body: {
     flex: 1,
     width: '100%',
     height: '100%',
     backgroundColor: '#50C3F3',
     alignItems: 'center',
+    justifyContent: "space-around"
   },
   placeholderLogo: {
     backgroundColor: '#FFFFFF',
