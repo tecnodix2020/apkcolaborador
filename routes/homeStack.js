@@ -4,6 +4,7 @@ import Home from '../screens/home';
 import Option from '../screens/option';
 import FormGuest from '../screens/formguest';
 import FormDelivery from '../screens/formdelivery';
+import FormUser from '../screens/formuser';
 
 const screens = {
     Home: {
@@ -28,6 +29,12 @@ const screens = {
         screen: FormDelivery,
         navigationOptions: {
             title: 'OPÇÕES DO COLABORADOR'
+        }
+    },
+    FormUser: {
+        screen: FormUser,
+        navigationOptions: {
+            title: 'CRIAÇÃO DE USUÁRIO'
         }
     },
 }

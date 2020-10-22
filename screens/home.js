@@ -30,13 +30,20 @@ export default function Home({ navigation }) {
     };
 
     const handlePasswordChange = (password) => {
-      console.log(password);
+      //console.log(password);
       setPassword(password);
     }; 
     
-    const pressHandler = () => {
-        
+    const pressHandlerCreate = () => {
+        navigation.navigate('FormUser');
+    }
+    
+    const pressHandlerConfirm = () => {
         navigation.navigate('Option');
+    }
+
+    async function saveUser(user) {
+      await AsyncStorage.setItem('@ListApp:userToken', JSON.stringify(user))
     }
 
     const handleSignInPress = async () => {
@@ -44,10 +51,19 @@ export default function Home({ navigation }) {
       setState({ error: 'Preencha usuário e senha para continuar!' }, () => false);
     } else {
       try {
-        const response = await api.post('/auth', {
-          username: email,
-          password: password,
-        });
+
+        const credentials = {
+          email: email,
+          password: password
+        }  
+
+        const response = await api.post('/auth', credentials);
+
+        const user = response.data;
+
+        console.log(user);
+
+        await saveUser(user);
 
         // validar aqui com if se logou certo antes de passar de tela 
         navigation.navigate('Option')
@@ -61,9 +77,9 @@ export default function Home({ navigation }) {
     return (
 
       <KeyboardAvoidingView
-  behavior={Platform.OS == "ios" ? "padding" : "height"}
-  style={styles.container}
->
+        behavior={Platform.OS == "ios" ? "padding" : "height"}
+        style={styles.container}
+      >
         <View style={[styles.body]}>
             <View style={[styles.placeholderLogo]}>
               <Image style={styles.imgLogo} source={require('../img/logo.png')} />
@@ -92,14 +108,23 @@ export default function Home({ navigation }) {
               autoCorrect={false}
               secureTextEntry={true}
             />
+            <View style={styles.containerButtons}>
+              <TouchableOpacity style={styles.buttonCreate} onPress={pressHandlerCreate}>
+                <Text style={styles.submitText}>Novo</Text>
+              </TouchableOpacity>
 
-            <TouchableOpacity style={styles.buttonSubmit} onPress={pressHandler}>
-              <Text style={styles.submitText}>Acessar</Text>
-            </TouchableOpacity>
+              
+              <TouchableOpacity style={styles.buttonSubmit} onPress={handleSignInPress}>
+                <Text style={styles.submitText}>Entrar</Text>
+              </TouchableOpacity>
+            </View>
         </View>
       </KeyboardAvoidingView>
   )
 }
+
+//pressHandlerConfirm
+//handleSignInPress
 
 const styles = StyleSheet.create({
   container: {
@@ -111,9 +136,11 @@ const styles = StyleSheet.create({
     height: '100%',
     backgroundColor: '#50C3F3',
     alignItems: 'center',
-    justifyContent: "space-around"
+    //justifyContent: "space-around"
+    justifyContent: 'space-between'
   },
   placeholderLogo: {
+    //flex: 1,
     backgroundColor: '#FFFFFF',
     width: Dimensions.get('window').width * 0.50,
     height: Dimensions.get('window').width * 0.50,
@@ -121,31 +148,42 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     alignContent: 'center',
-    marginTop: wp(15),
+    marginTop: '5%',
+    resizeMode: 'stretch',
   },
   imgLogo: {
     width: wp(35),
     height: hp(20),
+    resizeMode: 'stretch',
   },
   inputMail: {
-    marginTop: wp(13),
-    backgroundColor: 'white',
-    width: wp(70),
-    borderRadius: wp(1.8),
-    fontSize: wp(4.1),
-  },
-  inputPassword: {
     marginTop: wp(2),
     backgroundColor: 'white',
     width: wp(70),
     borderRadius: wp(1.8),
     fontSize: wp(4.1),
   },
+  inputPassword: {
+    marginTop: wp(1),
+    backgroundColor: 'white',
+    width: wp(70),
+    borderRadius: wp(1.8),
+    fontSize: wp(4.1),
+  },
+  buttonCreate: {
+    backgroundColor: 'yellow',
+    width: wp(32),
+    height: hp(8),
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignContent: 'center',
+    borderRadius: Math.round(Dimensions.get('window').width + Dimensions.get('window').height) / 2.5, 
+  },
   buttonSubmit: {
-    marginTop: wp(10),
+    marginLeft: wp(5),
     backgroundColor: 'lightgreen',
-    width: wp(35),
-    height: hp(10),
+    width: wp(32),
+    height: hp(8),
     justifyContent: 'center',
     alignItems: 'center',
     alignContent: 'center',
@@ -153,7 +191,14 @@ const styles = StyleSheet.create({
   },
   submitText: {
     fontSize: wp(4.1),
-    color: 'grey',
+    color: 'blue',
     fontWeight: 'bold',
-  }
+  },
+  containerButtons: {
+    //flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: wp(5),
+  },
+
 });
