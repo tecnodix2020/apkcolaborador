@@ -1,11 +1,13 @@
-import React, {useState} from 'react';
+import React, {setState, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { KeyboardAvoidingView, TouchableOpacity, TextInput, Dimensions, StyleSheet, View, Text, Button, Image, TouchableWithoutFeedback } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {Animated, ToastAndroid, Keyboard, KeyboardAvoidingView, TouchableOpacity, TextInput, Dimensions, StyleSheet, View, Text, Button, Image, TouchableWithoutFeedback } from 'react-native';
 import {
  heightPercentageToDP as hp,
  widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 import api from '../services/api';
+
 
 //onPress={Keyboard.dismiss} - para colocar abraçando toda a view
 /*
@@ -19,18 +21,70 @@ https://reactnative.dev/docs/keyboardavoidingview
 */
 
 // hook --- nova forma
+
+let widthLogo =  Dimensions.get('window').width * 0.50;
+let heightLogo = Dimensions.get('window').width * 0.50;
+
 export default function Home({ navigation }) {
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+    const [isKeyboardVisible, setKeyboardVisible] = useState(false);
 
-    const handleEmailChange = (email) => {
-      setEmail(email);
+    useEffect(() => {
+      const keyboardDidShowListener = Keyboard.addListener(
+        'keyboardDidShow',
+        () => {
+          setKeyboardVisible(true); // or some other action
+          keyboardDidShow();
+          console.log("teclado up");
+        }
+      );
+      const keyboardDidHideListener = Keyboard.addListener(
+        'keyboardDidHide',
+        () => {
+          setKeyboardVisible(false); // or some other action
+          keyboardDidHide();
+          console.log("teclado down");
+        }
+      );
+
+      return () => {
+        keyboardDidHideListener.remove();
+        keyboardDidShowListener.remove();
+      };
+    }, []);
+
+    let _animatedValue = new Animated.Value(0);
+
+    const keyboardDidShow  = () => {
+      /*Animated.parallel([
+        Animated.timing(widthLogo, {​​​​​
+          toValue: Dimensions.get('window').width * 0.25,
+          duration: 200,
+        }​​​​​),
+        Animated.timing(heightLogo, {​​​​​
+          toValue: Dimensions.get('window').width * 0.25,
+          duration: 200,
+       }​​​​​),
+      ]).start();
+      Animated.timing(_animatedValue, {
+        toValue: 100,
+        useNativeDriver: true
+      }).start();*/
+    };
+
+    const keyboardDidHide = () => {
+      //console.log(_animatedValue);
+    };
+
+    const [username, setUserName] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+
+    const handleUsernameChange = (username) => {
+      setUserName(username);
     };
 
     const handlePasswordChange = (password) => {
-      //console.log(password);
       setPassword(password);
     }; 
     
@@ -38,22 +92,47 @@ export default function Home({ navigation }) {
         navigation.navigate('FormUser');
     }
     
-    const pressHandlerConfirm = () => {
-        navigation.navigate('Option');
+    // Storing value
+    const storeData = async (value) => {
+      try {
+        const jsonValue = JSON.stringify(value)
+        await AsyncStorage.setItem('@storage_Key', jsonValue)
+      } catch (e) {
+        console.log(e);
+      }
     }
 
-    async function saveUser(user) {
-      await AsyncStorage.setItem('@ListApp:userToken', JSON.stringify(user))
+    // Reading stored value
+    const getData = async () => {
+      try {
+        const jsonValue = await AsyncStorage.getItem('@storage_Key')
+        return jsonValue != null ? JSON.parse(jsonValue) : null;
+      } catch(e) {
+        console.log(e);
+      }
     }
+
+    const showToastWithGravityAndOffset = (message) => {
+    ToastAndroid.showWithGravityAndOffset(
+        message,
+        ToastAndroid.LONG,
+        ToastAndroid.TOP,
+        10,
+        20
+      );
+    };
 
     const handleSignInPress = async () => {
-    if (email.length === 0 || password.length === 0) {
-      setState({ error: 'Preencha usuário e senha para continuar!' }, () => false);
+    if (username.length === 0 || password.length === 0) {
+      //this.setState({ error: 'Preencha usuário e senha para continuar!' }, () => {
+        //console.log(error);
+      //});
+      showToastWithGravityAndOffset("Preencha Login e Senha!");
     } else {
       try {
 
         const credentials = {
-          email: email,
+          username: username,
           password: password
         }  
 
@@ -61,15 +140,15 @@ export default function Home({ navigation }) {
 
         const user = response.data;
 
-        console.log(user);
+        await AsyncStorage.setItem('@App_user', JSON.stringify(user)) // save itens to local storger
 
-        await saveUser(user);
+        const currentUser = await AsyncStorage.getItem('@App_user') // get data from storage passing key
 
-        // validar aqui com if se logou certo antes de passar de tela 
-        navigation.navigate('Option')
+        navigation.navigate('Option', currentUser)
 
       } catch (_err) {
-        this.setState({ error: 'Houve um problema com o login, verifique suas credenciais!' });
+        //this.setState({ error: 'Houve um problema com o login, verifique suas credenciais!' });
+        showToastWithGravityAndOffset("Dados Inválidos Para Login!")
       }
     }
   };
@@ -81,50 +160,52 @@ export default function Home({ navigation }) {
         style={styles.container}
       >
         <View style={[styles.body]}>
-            <View style={[styles.placeholderLogo]}>
-              <Image style={styles.imgLogo} source={require('../img/logo.png')} />
+
+            <View style={styles.containerImage}>
+              <View style={[styles.placeholderLogo]}>
+                <Image style={styles.imgLogo} source={require('../img/logo.png')} />
+              </View>
             </View>
 
-            <TextInput
-              style={styles.inputMail}
-              value={email}
-              onChangeText={handleEmailChange}
-              placeholder="Email"
-              keyboardType="email-address"
-              textContentType="emailAddress"
-              autoCapitalize="none"
-              autoCompleteType="email"
-              autoCorrect={false}
-            />
+            <View style={styles.containerImputs}>
 
-            <TextInput
-              style={styles.inputPassword}
-              value={password}
-              onChangeText={handlePasswordChange}
-              placeholder="Senha"
-              textContentType="password"
-              autoCapitalize="none"
-              autoCompleteType="password"
-              autoCorrect={false}
-              secureTextEntry={true}
-            />
-            <View style={styles.containerButtons}>
-              <TouchableOpacity style={styles.buttonCreate} onPress={pressHandlerCreate}>
-                <Text style={styles.submitText}>Novo</Text>
-              </TouchableOpacity>
+              <TextInput
+                style={styles.inputUsername}
+                value={username}
+                onChangeText={handleUsernameChange}
+                placeholder="Login"
+                autoCapitalize="none"
+                autoCorrect={false}
+              />
 
-              
-              <TouchableOpacity style={styles.buttonSubmit} onPress={handleSignInPress}>
-                <Text style={styles.submitText}>Entrar</Text>
-              </TouchableOpacity>
+              <TextInput
+                style={styles.inputPassword}
+                value={password}
+                onChangeText={handlePasswordChange}
+                placeholder="Senha"
+                textContentType="password"
+                autoCapitalize="none"
+                autoCompleteType="password"
+                autoCorrect={false}
+                secureTextEntry={true}
+              />
+
+              <View style={styles.containerButtons}>
+                <TouchableOpacity style={styles.buttonCreate} onPress={pressHandlerCreate}>
+                  <Text style={styles.submitText}>Criar Conta</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.buttonSubmit} onPress={handleSignInPress}>
+                  <Text style={styles.submitText}>Entrar</Text>
+                </TouchableOpacity>
+              </View>
+
             </View>
+
+            
         </View>
       </KeyboardAvoidingView>
   )
 }
-
-//pressHandlerConfirm
-//handleSignInPress
 
 const styles = StyleSheet.create({
   container: {
@@ -136,19 +217,20 @@ const styles = StyleSheet.create({
     height: '100%',
     backgroundColor: '#50C3F3',
     alignItems: 'center',
-    //justifyContent: "space-around"
     justifyContent: 'space-between'
   },
+  containerImage: {
+    flex: 1,
+  },
   placeholderLogo: {
-    //flex: 1,
     backgroundColor: '#FFFFFF',
-    width: Dimensions.get('window').width * 0.50,
-    height: Dimensions.get('window').width * 0.50,
+    width: widthLogo,
+    height: heightLogo,
     borderRadius: Math.round(Dimensions.get('window').width + Dimensions.get('window').height) / 2,
     justifyContent: 'center',
     alignItems: 'center',
     alignContent: 'center',
-    marginTop: '5%',
+    marginTop: '7%',
     resizeMode: 'stretch',
   },
   imgLogo: {
@@ -156,8 +238,11 @@ const styles = StyleSheet.create({
     height: hp(20),
     resizeMode: 'stretch',
   },
-  inputMail: {
-    marginTop: wp(2),
+  containerImputs: {
+    flex: 1,
+    //marginTop: wp(10),
+  },
+  inputUsername: {
     backgroundColor: 'white',
     width: wp(70),
     borderRadius: wp(1.8),
@@ -169,9 +254,10 @@ const styles = StyleSheet.create({
     width: wp(70),
     borderRadius: wp(1.8),
     fontSize: wp(4.1),
+    marginBottom: wp(1.5),
   },
   buttonCreate: {
-    backgroundColor: 'yellow',
+    backgroundColor: '#925590',
     width: wp(32),
     height: hp(8),
     justifyContent: 'center',
@@ -181,7 +267,7 @@ const styles = StyleSheet.create({
   },
   buttonSubmit: {
     marginLeft: wp(5),
-    backgroundColor: 'lightgreen',
+    backgroundColor: '#1c8cb7',
     width: wp(32),
     height: hp(8),
     justifyContent: 'center',
@@ -191,14 +277,15 @@ const styles = StyleSheet.create({
   },
   submitText: {
     fontSize: wp(4.1),
-    color: 'blue',
+    color: '#eeefe5',
     fontWeight: 'bold',
   },
   containerButtons: {
     //flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: wp(5),
   },
 
 });

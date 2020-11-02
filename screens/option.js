@@ -1,16 +1,19 @@
 import React from 'react';
-import { useWindowDimensions, TouchableOpacity, PixelRatio, Dimensions, StyleSheet, View, Text, Button, Image, TouchableWithoutFeedback } from 'react-native';
+import { ScrollView, SafeAreaView, useWindowDimensions, TouchableOpacity, PixelRatio, Dimensions, StyleSheet, View, Text, Button, Image, TouchableWithoutFeedback } from 'react-native';
 import {
  heightPercentageToDP as hp,
  widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 import { FAB } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Ionicons';
+import CardView from 'react-native-cardview';
 //import { createDrawerNavigator } from '@react-navigation/drawer';
 
 import FlashMessage from "react-native-flash-message";
-import { CardViewWithIcon } from "react-native-simple-card-view";
+
 import { Divider } from 'react-native-paper';
+
+import MessageBubble from '../components/MessageBubble';
 
 //const Drawer = createDrawerNavigator();
 
@@ -32,51 +35,75 @@ export default function Option({ navigation }) {
         navigation.navigate('FormDelivery');
     }
 
-    const miniCardStyle = {
-      shadowColor       : '#000000',
-      shadowOffsetWidth : 2,
-      shadowOffsetHeight: 2,
-      shadowOpacity     : 0.1,
-      hadowRadius      : 5,
-      bgColor           : '#ffffff',
-      padding           : 5,
-      margin            : 5,
-      borderRadius      : 3,
-      elevation         : 3,
-      width             : (Dimensions.get("window").width / 2) - 10
-    }
-
     return (
+      <View style={styles.body}>
+          <CardView
+            style={styles.card}
+            cardElevation={6}
+            cardMaxElevation={6}
+            cornerRadius={9}>
 
-        //<MyDrawer />
-        <View>
-          <View style={styles.body}>
-            <TouchableOpacity style={styles.buttonSubmit} onPress={pressHandler1}>
-              <Text style={styles.submitText}>Cadastrar Visitante</Text>
+            <ScrollView>
+
+              <MessageBubble
+                mine
+                text="Olá Guilherme, tenho uma encomenda para você."
+              />
+              <MessageBubble
+                text="Obrigado, estou indo até aí fazer a retirada."
+              />
+
+              <Divider/>
+              
+              <Text styles={styles.textDate}>
+                1 de Outubro 2020
+              </Text> 
+
+              <MessageBubble
+                mine
+                text="Olá Guilherme, cheguei para nossa reunião."
+              />
+              <MessageBubble
+                text="Tudo bem, gentileza entre e aguarde nos bancos, já lhe encontro em alguns minutos."
+              />
+
+              <Divider/>
+
+              <Text styles={styles.textDate}>
+                15 de Outubro 2020
+              </Text> 
+
+              <MessageBubble
+                mine
+                text="Olá Guilherme, cheguei para nossa reunião."
+              />
+              
+              <Text>{`
+                1. Responder que irá até a portaria
+                2. Responder para entrar e aguardar
+                3. Acionar Equipe Gente
+              `}</Text>
+
+              <MessageBubble
+                text="Olá, estarei aí em alguns minutos, por gentileza entre e se acomode."
+              />
+            </ScrollView>
+
+          </CardView>
+           
+
+          <View style={styles.options}>
+            <TouchableOpacity style={styles.circle1} >
+              <Text style={styles.text1}></Text>
             </TouchableOpacity>
-
-            <Divider />
-
-            <TouchableOpacity style={styles.buttonSubmit} onPress={pressHandler2}>
-              <Text style={styles.submitText}>Cadastrar Entrega</Text>
+            <TouchableOpacity style={styles.circle2} >
+              <Text style={styles.text2}></Text>
             </TouchableOpacity>
-
-            <Divider />
-
-            <CardViewWithIcon
-              withBackground={ false }
-              androidIcon={ 'md-jet' }
-              iosIcon={ 'ios-jet-outlin' }
-              iconHeight={ wp(45) }
-              iconColor={ '#ff0000' }
-              title={ 'Notificações' }
-              contentFontSize={ 10 }
-              titleFontSize={ wp(3.5) }
-              //style={ miniCardStyle }
-            />
+            <TouchableOpacity style={styles.circle3} >
+              <Text style={styles.text3}></Text>
+            </TouchableOpacity>
           </View>
-
-       </View>
+      </View>
     );
 }
 
@@ -86,19 +113,43 @@ const styles = StyleSheet.create({
     height: '100%',
     backgroundColor: '#50C3F3',
   },
-  submitText: {
-    fontSize: wp(4.1),
-    fontWeight: 'bold',
+  card: {
+    margin: wp(3),
+    height: '85%',
   },
-  buttonSubmit: {
-    backgroundColor: 'lightgreen',
-    width: wp(25),
-    height: hp(12),
-    padding: wp(2),
-    marginTop: wp(10),
-    marginLeft: wp(10),
-    textShadowColor: 'rgba(1, 0, 0, 0.75)',
-    textShadowOffset: {width: -2, height: 2},
-    textShadowRadius: 10
+  textDate: {
+    color: 'red',
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignContent: 'center',
+  },
+  options: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+  circle1: {
+    width: 50,
+    height: 50,
+    borderRadius: 50/2,
+    color: 'blue',
+    backgroundColor: 'white',
+  },
+  circle2: {
+    width: 50,
+    height: 50,
+    borderRadius: 50/2,
+    backgroundColor: 'blue',
+  },
+  circle3: {
+    width: 50,
+    height: 50,
+    borderRadius: 50/2,
+    backgroundColor: 'red',
+  },
+  text1: {
+    justifyContent: 'center',
+    alignItems: 'center',
   }
 });
