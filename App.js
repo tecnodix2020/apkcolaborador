@@ -12,7 +12,7 @@ import Navigator from './routes/homeStack';
 class App extends Component {
     render() {
       return (
-        <Navigator />
+          <Navigator />
       );
     }
 };
