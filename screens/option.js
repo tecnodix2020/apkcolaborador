@@ -24,6 +24,13 @@ import MessageBubble from '../components/MessageBubble';
          // <Drawer.Screen name="Article" component={Article} />
         //</Drawer.Navigator>
       //);
+/*
+<Text>{`
+    1. Responder que irá até a portaria
+    2. Responder para entrar e aguardar
+    3. Acionar Equipe Gente
+  `}</Text>*/
+
 
 export default function Option({ navigation }) {
 
@@ -77,12 +84,11 @@ export default function Option({ navigation }) {
                 mine
                 text="Olá Guilherme, cheguei para nossa reunião."
               />
-              
-              <Text>{`
-                1. Responder que irá até a portaria
-                2. Responder para entrar e aguardar
-                3. Acionar Equipe Gente
-              `}</Text>
+
+              <MessageBubble
+                mine
+                image={require('../img/opcaoentrega1.png')}
+              />
 
               <MessageBubble
                 text="Olá, estarei aí em alguns minutos, por gentileza entre e se acomode."
@@ -133,8 +139,7 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 50/2,
-    color: 'blue',
-    backgroundColor: 'white',
+    backgroundColor: 'green',
   },
   circle2: {
     width: 50,
