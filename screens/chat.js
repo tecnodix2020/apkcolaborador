@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {setState, useState, useEffect } from 'react';
 import { ScrollView, SafeAreaView, useWindowDimensions, TouchableOpacity, PixelRatio, Dimensions, StyleSheet, View, Text, Button, Image, TouchableWithoutFeedback } from 'react-native';
 import {
  heightPercentageToDP as hp,
@@ -12,7 +12,13 @@ import { Divider } from 'react-native-paper';
 
 import MessageBubble from '../components/MessageBubble';
 
-export default function Option({ navigation }) {
+export default function Chat({ navigation }) {
+
+    const [text, setTextName] = useState(''); 
+
+    const handleBluePress = () =>{
+      setTextName('Olá, estarei aí em alguns minutos, por gentileza entre e se acomode')
+    }
 
     return (
       <View style={styles.body}>
@@ -63,7 +69,7 @@ export default function Option({ navigation }) {
               />
 
               <MessageBubble
-                text="Olá, estarei aí em alguns minutos, por gentileza entre e se acomode."
+                text={text}
               />
             </ScrollView>
 
@@ -74,7 +80,7 @@ export default function Option({ navigation }) {
             <TouchableOpacity style={styles.circle1} >
               <Text style={styles.text1}></Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.circle2} >
+            <TouchableOpacity style={styles.circle2} onPress={handleBluePress} >
               <Text style={styles.text2}></Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.circle3} >

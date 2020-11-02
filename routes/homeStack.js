@@ -5,6 +5,7 @@ import Option from '../screens/option';
 import FormGuest from '../screens/formguest';
 import FormDelivery from '../screens/formdelivery';
 import FormUser from '../screens/formuser';
+import Chat from '../screens/chat';
 
 const screens = {
     Home: {
@@ -19,22 +20,28 @@ const screens = {
             title: 'OPÇÕES DO COLABORADOR'
         }
     },
+    Chat: {
+        screen: Chat,
+        navigationOptions: {
+            title: 'TELA DO CHAT'
+        }
+    },
     FormGuest: {
         screen: FormGuest,
         navigationOptions: {
-            title: 'OPÇÕES DO COLABORADOR'
+            title: 'FORMULÁRIO CONVIDADO'
         }
     },
     FormDelivery: {
         screen: FormDelivery,
         navigationOptions: {
-            title: 'OPÇÕES DO COLABORADOR'
+            title: 'FORMULÁRIO ENTREGA'
         }
     },
     FormUser: {
         screen: FormUser,
         navigationOptions: {
-            title: 'CRIAÇÃO DE USUÁRIO'
+            title: 'FORMULÁRIO USUÁRIO'
         }
     },
 }

@@ -4,30 +4,40 @@ import {
  heightPercentageToDP as hp,
  widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
-import { FAB } from 'react-native-paper';
-import Icon from 'react-native-vector-icons/Ionicons';
+
+import CardView from 'react-native-cardview';
 
 import Input from '../components/Input';
 
-import { withFormik } from 'formik';
-import Yup from 'yup';
+export default function FormGuest({ navigation }) {
 
-const Form = (props) => (
-  <View style={styles.body}>
-      <View>
-        <Input label="Data da Visita" />
-        <Input label="Nome do Visitante" />
-        <Input label="Colaborador Alternativo" />
+  const handleSubmit = () => {
+    console.log('submeteu formulário');
+    navigation.navigate('Chat');
+  }
 
-        <Button
-          onPress={props.handleSubmit}
-          title="Salvar"
-        />
-      </View>
+  return (
+    <View style={styles.body}>
+         <CardView
+          style={styles.card}
+          cardElevation={6}
+          cardMaxElevation={6}
+          cornerRadius={9}>
+          <View>
+            <Input label="Data da Visita" />
+            <Input label="Nome do Visitante" />
+            <Input label="Colaborador Alternativo" />
 
-      
-  </View>
-);
+            <Button
+              style={styles.button}
+              onPress={handleSubmit}
+              title="Salvar"
+            />
+          </View>
+        </CardView>
+    </View>
+  );
+}
 
 const styles = StyleSheet.create({
   body: {
@@ -37,15 +47,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#50C3F3',
     alignItems: 'center',
   },
+  card: {
+    width: '90%',
+    marginTop: wp(5),
+  },
+  button: {
+    height: wp(15),
+  }
 });
 
-export default withFormik({
-  mapPropsToValues: () => ({ email: '', password: '' }),
-
-  handleSubmit: (values) => {
-    console.log("values");
-  }
-})(Form);
 
 
 
