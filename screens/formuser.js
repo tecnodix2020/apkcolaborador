@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, setState } from 'react';
 import { TouchableOpacity, PixelRatio, Dimensions, StyleSheet, View, TextInput, Text, Button, Image, TouchableWithoutFeedback } from 'react-native';
 import {
  heightPercentageToDP as hp,
@@ -11,9 +11,25 @@ import Input from '../components/Input';
 
 export default function FormGuest({ navigation }) {
 
+  const [username, setUserName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleUsernameChange = (username) => {
+    setUserName(username);
+  };
+
+  const handleEmailChange = (email) => {
+    setEmail(email);
+  }; 
+
+  const handlePasswordChange = (password) => {
+    setPassword(password);
+  }; 
+
   const handleSubmit = () => {
-    console.log('submeteu formulário');
-    navigation.navigate('Chat');
+    console.log('submeteu formulário' + ' - ' + username + ' - ' + email + ' - ' + password);
+    //navigation.navigate('Chat');
   }
 
   return (
@@ -24,9 +40,29 @@ export default function FormGuest({ navigation }) {
           cardMaxElevation={6}
           cornerRadius={9}>
           <View>
-            <Input label="Nome" />
-            <Input label="Email" />
-            <Input label="Senha" />
+            <Input 
+              label="Nome"
+              value={username}
+              textContentType="name"
+              onChangeText={handleUsernameChange}
+            />
+            <Input 
+              label="Email"
+              value={email}
+              keyboardType="email-address"
+              textContentType="emailAddress"
+              onChangeText={handleEmailChange}
+            />
+            <Input 
+              label="Senha"
+              value={password}
+              textContentType="password"
+              autoCapitalize="none"
+              autoCompleteType="password"
+              onChangeText={handlePasswordChange}
+              autoCorrect={false}
+              secureTextEntry={true}
+            />
 
             <Button
               style={styles.button}
