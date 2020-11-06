@@ -8,125 +8,84 @@ import {
 } from 'react-native-responsive-screen';
 import api from '../services/api';
 
-
-//onPress={Keyboard.dismiss} - para colocar abraçando toda a view
-/*
-https://reactnative.dev/docs/keyboardavoidingview
-
-<KeyboardAvoidingView
-  behavior={Platform.OS == "ios" ? "padding" : "height"}
-  style={styles.container}
->
-</KeyboardAvoidingView>
-*/
-
-// hook --- nova forma
-
-let widthLogo =  Dimensions.get('window').width * 0.50;
-let heightLogo = Dimensions.get('window').width * 0.50;
-
 export default function Home({ navigation }) {
 
-    const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+  const [username, setUserName] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
-    useEffect(() => {
-      const keyboardDidShowListener = Keyboard.addListener(
-        'keyboardDidShow',
-        () => {
-          setKeyboardVisible(true); // or some other action
-          keyboardDidShow();
-          console.log("teclado up");
-        }
-      );
-      const keyboardDidHideListener = Keyboard.addListener(
-        'keyboardDidHide',
-        () => {
-          setKeyboardVisible(false); // or some other action
-          keyboardDidHide();
-          console.log("teclado down");
-        }
-      );
-
-      return () => {
-        keyboardDidHideListener.remove();
-        keyboardDidShowListener.remove();
-      };
-    }, []);
-
-    let _animatedValue = new Animated.Value(0);
-
-    const keyboardDidShow  = () => {
-      /*Animated.parallel([
-        Animated.timing(widthLogo, {​​​​​
-          toValue: Dimensions.get('window').width * 0.25,
-          duration: 200,
-        }​​​​​),
-        Animated.timing(heightLogo, {​​​​​
-          toValue: Dimensions.get('window').width * 0.25,
-          duration: 200,
-       }​​​​​),
-      ]).start();
-      Animated.timing(_animatedValue, {
-        toValue: 100,
-        useNativeDriver: true
-      }).start();*/
-    };
-
-    const keyboardDidHide = () => {
-      //console.log(_animatedValue);
-    };
-
-    const [username, setUserName] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
-
-    const handleUsernameChange = (username) => {
-      setUserName(username);
-    };
-
-    const handlePasswordChange = (password) => {
-      setPassword(password);
-    }; 
-    
-    const pressHandlerCreate = () => {
-        navigation.navigate('FormUser');
-    }
-    
-    // Storing value
-    const storeData = async (value) => {
-      try {
-        const jsonValue = JSON.stringify(value)
-        await AsyncStorage.setItem('@storage_Key', jsonValue)
-      } catch (e) {
-        console.log(e);
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        setKeyboardVisible(true); // or some other action
+        keyboardDidShow();
       }
-    }
-
-    // Reading stored value
-    const getData = async () => {
-      try {
-        const jsonValue = await AsyncStorage.getItem('@storage_Key')
-        return jsonValue != null ? JSON.parse(jsonValue) : null;
-      } catch(e) {
-        console.log(e);
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        setKeyboardVisible(false); // or some other action
+        keyboardDidHide();
       }
-    }
+    );
 
-    const showToastWithGravityAndOffset = (message) => {
+    return () => {
+      keyboardDidHideListener.remove();
+      keyboardDidShowListener.remove();
+    };
+  }, []);
+
+  const keyboardDidShow  = () => {};
+
+  const keyboardDidHide = () => {};
+
+  const handleUsernameChange = (username) => {
+    setUserName(username);
+  };
+
+  const handlePasswordChange = (password) => {
+    setPassword(password);
+  }; 
+    
+  const pressHandlerCreate = () => {
+    navigation.navigate('FormUser');
+  }
+    
+  // Storing value
+  const storeData = async (value) => {
+    try {
+      const jsonValue = JSON.stringify(value)
+      await AsyncStorage.setItem('@storage_Key', jsonValue)
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  // Reading stored value
+  const getData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('@storage_Key')
+      return jsonValue != null ? JSON.parse(jsonValue) : null;
+    } catch(e) {
+      console.log(e);
+    }
+  }
+
+  const showToastWithGravityAndOffset = (message) => {
     ToastAndroid.showWithGravityAndOffset(
-        message,
-        ToastAndroid.LONG,
-        ToastAndroid.TOP,
-        10,
-        20
-      );
-    };
+      message,
+      ToastAndroid.LONG,
+      ToastAndroid.TOP,
+      10,
+      20
+    );
+  };
 
-    const handleSignInPress = async () => {
+  const handleSignInPress = async () => {
     if (username.length === 0 || password.length === 0) {
-      //this.setState({ error: 'Preencha usuário e senha para continuar!' }, () => {
-        //console.log(error);
-      //});
+      setError('Preencha usuário e senha para continuar!');
       showToastWithGravityAndOffset("Preencha Login e Senha!");
     } else {
       try {
@@ -140,70 +99,71 @@ export default function Home({ navigation }) {
 
         const user = response.data;
 
+        console.log(user);
+
         await AsyncStorage.setItem('@App_user', JSON.stringify(user)) // save itens to local storger
 
         const currentUser = await AsyncStorage.getItem('@App_user') // get data from storage passing key
 
-        navigation.navigate('Option', currentUser)
+        console.log(JSON.parse(currentUser).user.name); // feito
+
+        navigation.navigate('Option');
 
       } catch (_err) {
-        //this.setState({ error: 'Houve um problema com o login, verifique suas credenciais!' });
+        setError('Houve um problema com o login, verifique suas credenciais!');
         showToastWithGravityAndOffset("Dados Inválidos Para Login!")
+        console.log(_err);
       }
     }
   };
 
-    return (
+  return (
 
-      <KeyboardAvoidingView
-        behavior={Platform.OS == "ios" ? "padding" : "height"}
-        style={styles.container}
-      >
-        <View style={[styles.body]}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS == "ios" ? "padding" : "height"}
+      style={styles.container}
+    >
+      <View style={[styles.body]}>
+          <View style={styles.containerImage}>
+            {!isKeyboardVisible ? (<View style={styles.placeholderLogo}>
+               <Image style={styles.imgLogo} source={require('../img/logo.png')} />
+            </View>) : null }
+          </View>
 
-            <View style={styles.containerImage}>
-              <View style={[styles.placeholderLogo]}>
-                <Image style={styles.imgLogo} source={require('../img/logo.png')} />
-              </View>
+          <View style={styles.containerImputs}>
+
+            <TextInput
+              style={styles.inputUsername}
+              value={username}
+              onChangeText={handleUsernameChange}
+              placeholder="Login"
+              autoCapitalize="none"
+              autoCorrect={false}
+            />
+
+            <TextInput
+              style={styles.inputPassword}
+              value={password}
+              onChangeText={handlePasswordChange}
+              placeholder="Senha"
+              textContentType="password"
+              autoCapitalize="none"
+              autoCompleteType="password"
+              autoCorrect={false}
+              secureTextEntry={true}
+            />
+
+            <View style={styles.containerButtons}>
+              <TouchableOpacity style={styles.buttonCreate} onPress={pressHandlerCreate}>
+                <Text style={styles.submitText}>Criar Conta</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.buttonSubmit} onPress={handleSignInPress}>
+                <Text style={styles.submitText}>Entrar</Text>
+              </TouchableOpacity>
             </View>
-
-            <View style={styles.containerImputs}>
-
-              <TextInput
-                style={styles.inputUsername}
-                value={username}
-                onChangeText={handleUsernameChange}
-                placeholder="Login"
-                autoCapitalize="none"
-                autoCorrect={false}
-              />
-
-              <TextInput
-                style={styles.inputPassword}
-                value={password}
-                onChangeText={handlePasswordChange}
-                placeholder="Senha"
-                textContentType="password"
-                autoCapitalize="none"
-                autoCompleteType="password"
-                autoCorrect={false}
-                secureTextEntry={true}
-              />
-
-              <View style={styles.containerButtons}>
-                <TouchableOpacity style={styles.buttonCreate} onPress={pressHandlerCreate}>
-                  <Text style={styles.submitText}>Criar Conta</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.buttonSubmit} onPress={handleSignInPress}>
-                  <Text style={styles.submitText}>Entrar</Text>
-                </TouchableOpacity>
-              </View>
-
-            </View>
-
-            
-        </View>
-      </KeyboardAvoidingView>
+          </View>
+      </View>
+    </KeyboardAvoidingView>
   )
 }
 
@@ -224,8 +184,8 @@ const styles = StyleSheet.create({
   },
   placeholderLogo: {
     backgroundColor: '#FFFFFF',
-    width: widthLogo,
-    height: heightLogo,
+    width: Math.round(Dimensions.get('window').width * 0.50),
+    height: Math.round(Dimensions.get('window').width * 0.50),
     borderRadius: Math.round(Dimensions.get('window').width + Dimensions.get('window').height) / 2,
     justifyContent: 'center',
     alignItems: 'center',

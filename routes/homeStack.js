@@ -3,6 +3,7 @@ import { createAppContainer } from 'react-navigation';
 import Home from '../screens/home';
 import Option from '../screens/option';
 import FormGuest from '../screens/formguest';
+import FormGuestDetails from '../screens/formguestdetails';
 import FormDelivery from '../screens/formdelivery';
 import FormUser from '../screens/formuser';
 import Chat from '../screens/chat';
@@ -30,6 +31,12 @@ const screens = {
         screen: FormGuest,
         navigationOptions: {
             title: 'FORMULÁRIO CONVIDADO'
+        }
+    },
+    FormGuestDetails: {
+        screen: FormGuestDetails,
+        navigationOptions: {
+            title: 'FORMULÁRIO DETALHES CONVIDADO'
         }
     },
     FormDelivery: {
