@@ -1,9 +1,11 @@
 import React, { useState, setState } from 'react';
-import { Picker, TouchableOpacity, PixelRatio, Dimensions, StyleSheet, View, TextInput, Text, Button, Image, TouchableWithoutFeedback } from 'react-native';
+import { TouchableOpacity, PixelRatio, Dimensions, StyleSheet, View, TextInput, Text, Button, Image, TouchableWithoutFeedback } from 'react-native';
 import {
  heightPercentageToDP as hp,
  widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
+
+import {Picker} from '@react-native-picker/picker';
 
 import DateTimePicker from '@react-native-community/datetimepicker';
 
@@ -46,6 +48,26 @@ export default function FormGuest({ route, navigation }) {
     navigation.navigate('Chat');
   }
 
+  var guests = {
+    "1" : "AUGUSTO PEREIRA - SIMÕES",
+    "2" : "JOSÉ RICARDO - AMBRAI",
+    "3" : "MAURO - TECIDOS TITA",
+    "4" : "FERNANDO - N/A",
+    "5" : "FERNANDO - N/A",
+  }
+
+  /*var options =["Home","Savings","Car","GirlFriend"];
+  <Picker
+    style={{your_style}}
+    mode="dropdown"
+    selectedValue={this.state.selected}
+    onValueChange={()=>{}}> //add your function to handle picker state change
+    {options.map((item, index) => {
+        return (<Picker.Item label={item} value={index} key={index}/>) 
+    })}
+  </Picker>*/
+
+
   const myIcon = (<Icon name="user" size={40} color="black"/>)
   const myIcon2 = (<Icon name="plus" size={20} color="green"/>)
 
@@ -71,9 +93,9 @@ export default function FormGuest({ route, navigation }) {
                 style={{ height: 70, width: 300 }}
                 onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
               >
-                <Picker.Item label="AUGUSTO PEREIRA - SIMÕES" value="Márcio" />
-                <Picker.Item label="JOSÉ RICARDO - AMBRAI" value="João" />
-                <Picker.Item label="MAURO - TECIDOS TITA" value="João" />
+                {Object.keys(guests).map((key) => {
+                    return (<Picker.Item label={guests[key]} value={key} key={key}/>)
+                })}
               </Picker>
               
               <TouchableOpacity style={styles.icon} onPress={pressHandlerCreateVisit}>
