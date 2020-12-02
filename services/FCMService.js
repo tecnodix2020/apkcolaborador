@@ -1,5 +1,6 @@
 import messaging from '@react-native-firebase/messaging'
 import { Platform } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 class FCMService {
   register = (onRegister, onNotification, onOpenNotification) => {
@@ -31,6 +32,7 @@ class FCMService {
     messaging().getToken()
     .then(fcmToken => {
       if (fcmToken) {
+        await AsyncStorage.setItem('@fcm-token', fcmToken)
         onRegister(fcmToken)
       } else {
         console.log("[FCMService] User does not have a device token")

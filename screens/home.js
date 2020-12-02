@@ -105,7 +105,11 @@ export default function Home({ navigation }) {
 
         const currentUser = await AsyncStorage.getItem('@App_user') // get data from storage passing key
 
-        console.log(JSON.parse(currentUser).user.name); // feito
+        currentUser = JSON.parse(currentUser); // feito
+
+        const fcmToken = await AsyncStorage.getItem('@fcm-token');
+        currentUser.user.appToken = fcmToken;
+        const updatedUser = await api.put(`/users/${currentUser.user.id}`, currentUser);
 
         navigation.navigate('Option');
 
