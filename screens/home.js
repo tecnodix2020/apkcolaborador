@@ -99,13 +99,11 @@ export default function Home({ navigation }) {
 
         const user = response.data;
 
-        console.log(user);
-
         await AsyncStorage.setItem('@App_user', JSON.stringify(user)) // save itens to local storger
 
         const currentUser = await AsyncStorage.getItem('@App_user') // get data from storage passing key
 
-        console.log(JSON.parse(currentUser).user.name); // feito
+        //console.log(JSON.parse(currentUser).user.name); // feito
 
         navigation.navigate('Option');
 

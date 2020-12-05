@@ -76,7 +76,6 @@ export default function FormGuest({ navigation }) {
         
 
       } catch (_err) {
-        //showToastWithGravityAndOffset("Dados Inválidos Para Login!")
         showToastWithGravityAndOffset("Houve um erro na conexão!");
         console.log(_err);
       }
@@ -136,7 +135,7 @@ const styles = StyleSheet.create({
   },
   card: {
     width: '90%',
-    marginTop: wp(5),
+    marginTop: wp(15),
   },
   button: {
     height: wp(15),

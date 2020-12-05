@@ -31,6 +31,7 @@ const styles = StyleSheet.create({
     fontSize: wp(5.1),
     color: '#042302',
     margin: wp(2),
+    fontWeight: 'bold'
   },
   input: {
     borderBottomWidth: 0.5,

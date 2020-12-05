@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
   },
   card: {
     width: '90%',
-    marginTop: wp(5),
+    marginTop: wp(15),
   },
   button: {
     height: wp(15),

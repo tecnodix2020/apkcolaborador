@@ -16,16 +16,6 @@ export default function Chat({ navigation }) {
 
     const [text, setTextName] = useState(''); 
 
-    const handleGreenPress = () =>{
-      setTextName('Olá, estou indo até aí lhe recepcionar')
-    }
-    const handleBluePress = () =>{
-      setTextName('Olá, gentileza acomodesse que estarei aí em alguns minutos')
-    }
-    const handleRedPress = () =>{
-      setTextName('Olá, vou acionar um colaborador para te acompanhar até o local da reunião')
-    }
-
     return (
       <View style={styles.body}>
           <CardView
@@ -80,19 +70,7 @@ export default function Chat({ navigation }) {
             </ScrollView>
 
           </CardView>
-           
-
-          <View style={styles.options}>
-            <TouchableOpacity style={styles.circle1} onPress={handleGreenPress} >
-              <Text style={styles.text1}></Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.circle2} onPress={handleBluePress} >
-              <Text style={styles.text2}></Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.circle3} onPress={handleRedPress}  >
-              <Text style={styles.text3}></Text>
-            </TouchableOpacity>
-          </View>
+          
       </View>
     );
 }

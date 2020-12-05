@@ -14,6 +14,7 @@ import com.facebook.soloader.SoLoader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import org.wonday.orientation.OrientationActivityLifecycle;
+import com.reactcommunity.rndatetimepicker.RNDateTimePickerPackage;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -30,7 +31,8 @@ public class MainApplication extends Application implements ReactApplication {
           List<ReactPackage> packages = new PackageList(this).getPackages();
           // Packages that cannot be autolinked yet can be added manually here, for example:
           // packages.add(new MyReactNativePackage());
-          //packages.add(new OrientationPackage()); Talvez seja aqui o erro da configuração de orientação
+          // packages.add(new OrientationPackage()); Talvez seja aqui o erro da configuração de orientação
+          // packages.add(new RNDateTimePickerPackage()); -- aparentemente está criando duas vezes
           return packages;
         }
 

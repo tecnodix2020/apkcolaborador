@@ -1,79 +1,74 @@
-import React, { useState, setState } from 'react';
-import { TouchableOpacity, PixelRatio, Dimensions, StyleSheet, View, TextInput, Text, Button, Image, TouchableWithoutFeedback } from 'react-native';
+import React, { useState, setState, useEffect } from 'react';
+import { ToastAndroid, TouchableOpacity, PixelRatio, Dimensions, StyleSheet, View, TextInput, Text, Button, Image, TouchableWithoutFeedback } from 'react-native';
 import {
  heightPercentageToDP as hp,
  widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
+import api from '../services/api';
 
-import {Picker} from '@react-native-picker/picker';
+import { format, parseISO, isAfter } from "date-fns";
+
+import pt from 'date-fns/locale/pt-BR';
 
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 import CardView from 'react-native-cardview';
 
-import Input from '../components/Input';
-
 import Icon from 'react-native-vector-icons/FontAwesome';
+
+import GuestList from '../components/guests.js';
+
+import EmployeeList from '../components/employees.js';
 
 export default function FormGuest({ route, navigation }) {
 
-  const [selectedValue, setSelectedValue] = useState('');
-  const [date, setDate] = useState(new Date(1598051730000));
-  const [mode, setMode] = useState('date');
-  const [show, setShow] = useState(true);
-
+  const [pickerValue, setPickerSelectedValue] = useState('');
+  const [date, setDate] = useState(new Date());
+  const [displayDate, setDisplayDate] =useState(format(new Date(), "dd 'de' MMMM'", { locale: pt }));
+  const [show, setShow] = useState(false);
+  const [serverData, serverDataLoaded] = useState([]);
+  const [isLoading, setLoading] = useState(true);
   const [postText, setPostText] = useState('');
 
   const onChange = (event, selectedDate) => { 
     const currentDate = selectedDate || date;
-    setShow(Platform.OS === 'ios');
+    setShow(false);
+    setDisplayDate(format(selectedDate, "dd 'de' MMMM'", { locale: pt }))
     setDate(currentDate);
-  };
+  }
 
-  const showMode = (currentMode) => {
-    setShow(true);
-    setMode(currentMode);
-  };
-
-  const showDatepicker = () => {
-    showMode('date');
-  };
-
-  const showTimepicker = () => {
-    showMode('time');
-  };
+  const onPickerGuessChanged = (childData) => {
+      console.log(childData);
+      setPickerSelectedValue(childData);
+  }
 
   const handleSubmit = () => {
-    console.log('submeteu formulário');
-    navigation.navigate('Chat');
+    console.log(date);
+    console.log(pickerValue);
   }
 
-  var guests = {
-    "1" : "AUGUSTO PEREIRA - SIMÕES",
-    "2" : "JOSÉ RICARDO - AMBRAI",
-    "3" : "MAURO - TECIDOS TITA",
-    "4" : "FERNANDO - N/A",
-    "5" : "FERNANDO - N/A",
+  const pressHandlerCalendar = () => {
+    console.log("calendario clicado");
+    setShow(true);
   }
 
-  /*var options =["Home","Savings","Car","GirlFriend"];
-  <Picker
-    style={{your_style}}
-    mode="dropdown"
-    selectedValue={this.state.selected}
-    onValueChange={()=>{}}> //add your function to handle picker state change
-    {options.map((item, index) => {
-        return (<Picker.Item label={item} value={index} key={index}/>) 
-    })}
-  </Picker>*/
-
-
-  const myIcon = (<Icon name="user" size={40} color="black"/>)
-  const myIcon2 = (<Icon name="plus" size={20} color="green"/>)
+  const userIcon = (<Icon name="user" size={40} color="black"/>)
+  const plusIcon = (<Icon name="plus" size={20} color="green"/>)
+  const calendarIcon = (<Icon name="calendar" size={40} color="black"/>)
 
   const pressHandlerCreateVisit = () => {
     navigation.navigate('FormGuestDetails');
   }
+
+  const showToastWithGravityAndOffset = (message) => {
+    ToastAndroid.showWithGravityAndOffset(
+      message,
+      ToastAndroid.LONG,
+      ToastAndroid.BOTTON,
+      10,
+      20
+    );
+  };
 
   return (
     <View style={styles.body}>
@@ -83,24 +78,41 @@ export default function FormGuest({ route, navigation }) {
           cardMaxElevation={6}
           cornerRadius={9}>
           <View>
-            <Input label="Data da Visita" />
-            <Input label="Colaborador Adicional" />
+            <View style={styles.visitDate}>
+              <View style={{ height: 90, width: 280 }} >
+                <Text style={styles.txtCombo}> Selecione a Data da Visita</Text>
+                <Text
+                  style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
+                >
+                {displayDate}
+                </Text>
+              </View>
+              <TouchableOpacity style={styles.iconCalendar} onPress={pressHandlerCalendar}>
+                {calendarIcon}
+              </TouchableOpacity>
+              {show && (
+                <DateTimePicker
+                  testID="dateTimePicker"
+                  value={date}
+                  display="calendar"
+                  onChange={onChange}
+                />
+              )}
+            </View>
+
+            <View>
+              <Text style={styles.txtCombo}> Adicione Colaborador Adicional</Text>
+              <EmployeeList />
+            </View>
+
             <Text style={styles.txtCombo}> Visitante - Selecione ou Cadastre </Text>
-            
             <View style={styles.visit}>
-              <Picker
-                selectedValue={selectedValue}
-                style={{ height: 70, width: 300 }}
-                onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
-              >
-                {Object.keys(guests).map((key) => {
-                    return (<Picker.Item label={guests[key]} value={key} key={key}/>)
-                })}
-              </Picker>
-              
+              <GuestList 
+                parentCallback = {onPickerGuessChanged} // parentCallback is props from child
+              />
               <TouchableOpacity style={styles.icon} onPress={pressHandlerCreateVisit}>
-                {myIcon}
-                {myIcon2}
+                {userIcon}
+                {plusIcon}
               </TouchableOpacity>
             </View>
 
@@ -110,6 +122,7 @@ export default function FormGuest({ route, navigation }) {
               title="Salvar"
             />
           </View>
+          
         </CardView>
     </View>
   );
@@ -125,7 +138,7 @@ const styles = StyleSheet.create({
   },
   card: {
     width: '90%',
-    marginTop: wp(5),
+    marginTop: wp(15),
   },
   button: {
     height: wp(15),
@@ -134,10 +147,14 @@ const styles = StyleSheet.create({
     fontSize: wp(5.1),
     color: '#042302',
     margin: wp(2),
+    fontWeight: 'bold'
   },
   visit: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+  },
+  visitDate: {
+    flexDirection: 'row',
   },
   icon: {
     marginRight: (3),
@@ -145,6 +162,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     justifyContent: 'space-between',
+  },
+  iconCalendar: {
+    marginTop: wp(12),
   }
 
 });
