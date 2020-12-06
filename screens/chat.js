@@ -23,7 +23,7 @@ export default function Chat({ navigation }) {
   const [text, setTextName] = useState('');
   const [userLoggedIn, setUserLoggedIn] = useState('');
 
-  const menuIcon = (<Icon name="bars" size={40} color="black"/>)
+  const menuIcon = (<Icon name="bars" size={40} color="grey"/>)
 
   const openLeftMenu = () => {
     navigation.navigate('DrawerOpen');
@@ -152,8 +152,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   menu: {
-    backgroundColor: '#49a98e',
+    backgroundColor: '#fff',
     flexDirection: 'row',
+    opacity: 0.8,
   },
   icon: {
     marginLeft: wp(2),
@@ -162,7 +163,7 @@ const styles = StyleSheet.create({
     marginLeft: wp(5),
     alignContent: 'center',
     marginTop: wp(2),
-    color: 'white',
+    color: 'black',
     fontSize: wp(4.6),
   }
 });

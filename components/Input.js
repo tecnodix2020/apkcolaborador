@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     marginVertical: 5,
   },
   textInput: {
-    fontSize: wp(5.1),
+    fontSize: wp(4.1),
     color: '#042302',
     margin: wp(2),
     fontWeight: 'bold'
@@ -43,6 +43,7 @@ const styles = StyleSheet.create({
     height: wp(10),
     borderRadius: wp(1.8),
     fontSize: wp(5.1),
+    opacity: 0.65,
   },
   errorInput: { color: "red", fontSize: 12 },
 });

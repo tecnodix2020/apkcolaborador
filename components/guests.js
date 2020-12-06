@@ -17,7 +17,9 @@ export default class Guests extends Component {
   
   loadGuests = async() => { 
     try {
-      var response = await api.get('/visitors')
+      var response = await api.get('/visitors');
+
+      console.log(response.data);
 
       this.setState ({
                   data: response.data.map(item => {
@@ -57,5 +59,6 @@ export default class Guests extends Component {
 const styles = StyleSheet.create({
   pickerStyle: {
     width: '80%',
+    marginLeft: '2%',
   },
 });

@@ -10,6 +10,8 @@ import CardView from 'react-native-cardview';
 
 import Input from '../components/Input';
 
+import { Divider } from 'react-native-paper';
+
 export default function FormGuest({ navigation }) {
 
   const [username, setUserName] = useState('');
@@ -32,11 +34,6 @@ export default function FormGuest({ navigation }) {
     setUserName('');
     setEmail('');
     setPassword('');
-  }
-
-  const handleSubmit = () => {
-    console.log('submeteu formulário' + ' - ' + username + ' - ' + email + ' - ' + password);
-    //navigation.navigate('Chat');
   }
 
   const showToastWithGravityAndOffset = (message) => {
@@ -91,20 +88,26 @@ export default function FormGuest({ navigation }) {
           cornerRadius={9}>
           <View>
             <Input 
-              label="Nome"
+              label="NOME"
               value={username}
               textContentType="name"
               onChangeText={handleUsernameChange}
             />
+
+            <Divider />
+
             <Input 
-              label="Email"
+              label="EMAIL"
               value={email}
               keyboardType="email-address"
               textContentType="emailAddress"
               onChangeText={handleEmailChange}
             />
+
+            <Divider />
+
             <Input 
-              label="Senha"
+              label="SENHA"
               value={password}
               textContentType="password"
               autoCapitalize="none"
@@ -114,12 +117,13 @@ export default function FormGuest({ navigation }) {
               secureTextEntry={true}
             />
 
-            <Button
-              style={styles.button}
-              onPress={handleCreateUserPress}
-              title="Salvar"
-            />
+            <Divider />
+
           </View>
+
+          <TouchableOpacity style={styles.submitContainer} onPress={handleCreateUserPress}>
+            <Text style={styles.submit}> SALVAR </Text>
+          </TouchableOpacity>
         </CardView>
     </View>
   );
@@ -136,10 +140,29 @@ const styles = StyleSheet.create({
   card: {
     width: '90%',
     marginTop: wp(15),
+    alignItems: 'center',
   },
   button: {
     height: wp(15),
-  }
+  },
+  submitContainer: {
+    elevation: 8,
+    backgroundColor: "#009688",
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    marginTop: wp(3),
+    marginBottom: wp(3),
+    width: '60%',
+    alignSelf: "center",
+  },
+  submit: {
+    fontSize: wp(5.5),
+    color: "#fff",
+    fontWeight: "bold",
+    alignSelf: "center",
+    textTransform: "uppercase"
+  },
 });
 
 

@@ -3,7 +3,7 @@ import { createAppContainer } from 'react-navigation';
 import { createDrawerNavigator } from 'react-navigation-drawer';
 
 import Chat from './chat';
-import Visita from './formguest';
+import Visitante from './formguest';
 import Entrega from './formdelivery';
 
 import CustomDrawer from '../components/CustomDrawer';
@@ -11,7 +11,7 @@ import CustomDrawer from '../components/CustomDrawer';
 const Routes = createAppContainer(
   createDrawerNavigator({
     Chat,
-    Visita,
+    Visitante,
     Entrega
   }, {
     initialRouteName: 'Chat',

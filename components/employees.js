@@ -58,5 +58,6 @@ export default class Employee extends Component {
 const styles = StyleSheet.create({
   pickerStyle: {
     width: '80%',
+    marginLeft: '2%',
   },
 });
