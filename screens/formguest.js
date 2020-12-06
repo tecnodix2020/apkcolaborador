@@ -6,6 +6,8 @@ import {
 } from 'react-native-responsive-screen';
 import api from '../services/api';
 
+import { Divider } from 'react-native-paper';
+
 import { format, parseISO, isAfter } from "date-fns";
 
 import pt from 'date-fns/locale/pt-BR';
@@ -22,43 +24,14 @@ import EmployeeList from '../components/employees.js';
 
 export default function FormGuest({ route, navigation }) {
 
-  const [pickerValue, setPickerSelectedValue] = useState('');
   const [date, setDate] = useState(new Date());
   const [displayDate, setDisplayDate] =useState(format(new Date(), "dd 'de' MMMM'", { locale: pt }));
   const [show, setShow] = useState(false);
   const [serverData, serverDataLoaded] = useState([]);
   const [isLoading, setLoading] = useState(true);
   const [postText, setPostText] = useState('');
-
-  const onChange = (event, selectedDate) => { 
-    const currentDate = selectedDate || date;
-    setShow(false);
-    setDisplayDate(format(selectedDate, "dd 'de' MMMM'", { locale: pt }))
-    setDate(currentDate);
-  }
-
-  const onPickerGuessChanged = (childData) => {
-      console.log(childData);
-      setPickerSelectedValue(childData);
-  }
-
-  const handleSubmit = () => {
-    console.log(date);
-    console.log(pickerValue);
-  }
-
-  const pressHandlerCalendar = () => {
-    console.log("calendario clicado");
-    setShow(true);
-  }
-
-  const userIcon = (<Icon name="user" size={40} color="black"/>)
-  const plusIcon = (<Icon name="plus" size={20} color="green"/>)
-  const calendarIcon = (<Icon name="calendar" size={40} color="black"/>)
-
-  const pressHandlerCreateVisit = () => {
-    navigation.navigate('FormGuestDetails');
-  }
+  const [guestPickerValue, setGuestPickerSelectedValue] = useState('');
+  const [employeePickerValue, setEmployeePickerSelectedValue] = useState('');
 
   const showToastWithGravityAndOffset = (message) => {
     ToastAndroid.showWithGravityAndOffset(
@@ -70,6 +43,43 @@ export default function FormGuest({ route, navigation }) {
     );
   };
 
+  const onChange = (event, selectedDate) => { 
+    const currentDate = selectedDate || date;
+    setShow(false);
+    setDisplayDate(format(selectedDate, "dd 'de' MMMM'", { locale: pt }))
+    setDate(currentDate);
+  }
+
+  const onGuessPickedValueChanged = (childData) => {
+      console.log(childData);
+      setGuestPickerSelectedValue(childData);
+  }
+
+  const onEmployeePickedValueChanged = (childData) => {
+      console.log(childData);
+      setEmployeePickerSelectedValue(childData);
+  }
+
+  const handleSubmit = () => {
+    console.log(date);
+    console.log(guestPickerValue);
+    console.log(employeePickerValue);
+    //showToastWithGravityAndOffset("Visita Salva");
+  }
+
+  const pressHandlerCalendar = () => {
+    console.log("calendario clicado");
+    setShow(true);
+  }
+
+  const userIcon = (<Icon name="user" size={40} color="black"/>)
+  const plusIcon = (<Icon name="plus" size={20} color="green"/>)
+  const calendarIcon = (<Icon name="calendar" size={42} color="#54315d" />)
+
+  const pressHandlerCreateVisit = () => {
+    navigation.navigate('FormGuestDetails');
+  }
+
   return (
     <View style={styles.body}>
          <CardView
@@ -78,18 +88,17 @@ export default function FormGuest({ route, navigation }) {
           cardMaxElevation={6}
           cornerRadius={9}>
           <View>
-            <View style={styles.visitDate}>
-              <View style={{ height: 90, width: 280 }} >
-                <Text style={styles.txtCombo}> Selecione a Data da Visita</Text>
-                <Text
-                  style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-                >
-                {displayDate}
-                </Text>
+            <View style={styles.fields}>
+              <Text style={styles.txtCombo}>DATA DA VISITA</Text>
+              <View style={styles.visitDate}>
+                <TouchableOpacity style={styles.iconCalendar} onPress={pressHandlerCalendar}>
+                  {calendarIcon}
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.iconCalendar} onPress={pressHandlerCalendar}>
+                  <Text style={styles.txtDate}> {displayDate} </Text>
+                </TouchableOpacity>
               </View>
-              <TouchableOpacity style={styles.iconCalendar} onPress={pressHandlerCalendar}>
-                {calendarIcon}
-              </TouchableOpacity>
+
               {show && (
                 <DateTimePicker
                   testID="dateTimePicker"
@@ -100,30 +109,40 @@ export default function FormGuest({ route, navigation }) {
               )}
             </View>
 
-            <View>
-              <Text style={styles.txtCombo}> Adicione Colaborador Adicional</Text>
-              <EmployeeList />
+            <Divider/>
+
+            <View style={styles.fields}>
+              <Text style={styles.txtCombo}>COLABORADORES ALTERNATIVOS</Text>
+              <EmployeeList parentCallback = {onEmployeePickedValueChanged} />
             </View>
 
-            <Text style={styles.txtCombo}> Visitante - Selecione ou Cadastre </Text>
-            <View style={styles.visit}>
-              <GuestList 
-                parentCallback = {onPickerGuessChanged} // parentCallback is props from child
-              />
-              <TouchableOpacity style={styles.icon} onPress={pressHandlerCreateVisit}>
-                {userIcon}
-                {plusIcon}
-              </TouchableOpacity>
+            <Divider/>
+
+            <View style={styles.fields}>
+              <Text style={styles.txtCombo}> SELEÇÃO DO VISITANTE </Text>
+              <View style={styles.visit}>
+                <GuestList parentCallback = {onGuessPickedValueChanged} />
+                <TouchableOpacity style={styles.icon} onPress={pressHandlerCreateVisit}>
+                  {userIcon}
+                  {plusIcon}
+                </TouchableOpacity>
+              </View>
             </View>
 
-            <Button
-              style={styles.button}
-              onPress={handleSubmit}
-              title="Salvar"
-            />
+            <Divider/>
+
           </View>
+
+          <TouchableOpacity style={styles.submitContainer} onPress={handleSubmit}>
+            <Text style={styles.submit}> SALVAR </Text>
+          </TouchableOpacity>
+
           
         </CardView>
+
+        <View>
+          <Text>{postText}</Text>
+        </View>
     </View>
   );
 }
@@ -138,16 +157,16 @@ const styles = StyleSheet.create({
   },
   card: {
     width: '90%',
+    height: '75%',
     marginTop: wp(15),
-  },
-  button: {
-    height: wp(15),
+    alignItems: 'center',
   },
   txtCombo: {
-    fontSize: wp(5.1),
+    fontSize: wp(4.1),
     color: '#042302',
-    margin: wp(2),
-    fontWeight: 'bold'
+    marginLeft: wp(2),
+    fontWeight: 'bold',
+    marginTop: wp(4),
   },
   visit: {
     flexDirection: 'row',
@@ -164,7 +183,30 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   iconCalendar: {
-    marginTop: wp(12),
+    margin: wp(3),
+  },
+  txtDate: {
+    margin: wp(3),
+    fontSize: wp(5.1),
+  },
+  submitContainer: {
+    elevation: 8,
+    backgroundColor: "#009688",
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    marginTop: wp(5),
+    width: '60%',
+  },
+  submit: {
+    fontSize: wp(5.5),
+    color: "#fff",
+    fontWeight: "bold",
+    alignSelf: "center",
+    textTransform: "uppercase"
+  },
+  fields: {
+    margin: wp(2.3),
   }
 
 });

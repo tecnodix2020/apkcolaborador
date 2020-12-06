@@ -14,11 +14,6 @@ export default class Employee extends Component {
       }
   }
 
-  employeeList =  () => {
-    return( this.state.data.map( (data,i) => { 
-        return( <Picker.Item label={data.name} key={i} value={data.name} color="blue" />)} ));
-  }
-
   loadEmployees = async() => { 
     try {
       var response = await api.get('/employees')
@@ -39,12 +34,21 @@ export default class Employee extends Component {
       this.loadEmployees();
   }
 
+  sendData = (value) => {
+      this.props.parentCallback(value);
+  }
+
+  employeeList =  () => {
+    return( this.state.data.map( (data,i) => { 
+        return( <Picker.Item label={data.name} key={i} value={data.name} color="#4c319e" />)} ));
+  }
+
   render() {
     return (
             <Picker
                 selectedValue={this.state.selectedEmployee}
-                style={{ height: 50, width: 270 }}
-                onValueChange={ (value) => ( this.setState({selectedEmployee : value}) )}>
+                style={styles.pickerStyle}
+                onValueChange={ (value) => ( this.setState({selectedEmployee : value}), this.sendData(value))}>
                 { this.employeeList() }
             </Picker>
     );
@@ -52,27 +56,7 @@ export default class Employee extends Component {
 }
 
 const styles = StyleSheet.create({
-  body: {
-    flex: 1,
-    width: '100%',
-    height: '100%',
-    backgroundColor: '#50C3F3',
-    justifyContent: 'center',
-    alignItems: 'center',
-    alignContent: 'center',
-  },
-  employeesList: {
-    width: 220,
-    height: 350,
-    position: 'absolute',
-    left: '30%',
-    top: '25%',
-    backgroundColor: '#FFF',
-    borderRadius: 15,
-  },
-  name: {
-    paddingLeft: 10,
-    paddingTop: 15,
-    fontSize: 20,
+  pickerStyle: {
+    width: '80%',
   },
 });

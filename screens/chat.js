@@ -1,9 +1,11 @@
 import React, {setState, useState, useEffect } from 'react';
-import { ScrollView, SafeAreaView, useWindowDimensions, TouchableOpacity, PixelRatio, Dimensions, StyleSheet, View, Text, Button, Image, TouchableWithoutFeedback } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { ScrollView, SafeAreaView, useWindowDimensions, TouchableOpacity, PixelRatio, Dimensions, StyleSheet, View, Text, Image, TouchableWithoutFeedback } from 'react-native';
 import {
  heightPercentageToDP as hp,
  widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
+
 import CardView from 'react-native-cardview';
 
 import FlashMessage from "react-native-flash-message";
@@ -12,66 +14,96 @@ import { Divider } from 'react-native-paper';
 
 import MessageBubble from '../components/MessageBubble';
 
+import Icon from 'react-native-vector-icons/FontAwesome';
+
+import { NavigationActions } from 'react-navigation';
+
 export default function Chat({ navigation }) {
 
-    const [text, setTextName] = useState(''); 
+  const [text, setTextName] = useState('');
+  const [userLoggedIn, setUserLoggedIn] = useState('');
 
-    return (
-      <View style={styles.body}>
-          <CardView
-            style={styles.card}
-            cardElevation={6}
-            cardMaxElevation={6}
-            cornerRadius={9}>
+  const menuIcon = (<Icon name="bars" size={40} color="black"/>)
 
-            <ScrollView>
+  const openLeftMenu = () => {
+    navigation.navigate('DrawerOpen');
+  }
 
-              <MessageBubble
-                mine
-                text="Olá Guilherme, tenho uma encomenda para você."
-              />
-              <MessageBubble
-                text="Obrigado, estou indo até aí fazer a retirada."
-              />
+  const getUserLoggedName = async() => {
+    const currentUser = await AsyncStorage.getItem('@App_user');
+    setUserLoggedIn(JSON.parse(currentUser).user.name);
+  }
 
-              <Divider/>
-              
-              <Text styles={styles.textDate}>
-                1 de Outubro 2020
-              </Text> 
+  useEffect(() => {
+    let isMounted = true;
+    getUserLoggedName();
+    return () => { isMounted = false }; 
+  });
+  
+  return (
+    <View style={styles.body}>
+        <View style={styles.menu}>
+            <TouchableOpacity style={styles.icon} onPress={openLeftMenu}>
+              {menuIcon}
+            </TouchableOpacity>
+            <Text style={styles.userText}>Olá {userLoggedIn}</Text>
+        </View>
 
-              <MessageBubble
-                mine
-                text="Olá Guilherme, cheguei para nossa reunião."
-              />
-              <MessageBubble
-                text="Tudo bem, gentileza entre e aguarde nos bancos, já lhe encontro em alguns minutos."
-              />
+        <CardView
+          style={styles.card}
+          cardElevation={6}
+          cardMaxElevation={6}
+          cornerRadius={9}>
 
-              <Divider/>
+          <ScrollView>
 
-              <Text styles={styles.textDate}>
-                15 de Outubro 2020
-              </Text> 
+            <MessageBubble
+              mine
+              text="Olá Guilherme, tenho uma encomenda para você."
+            />
+            <MessageBubble
+              text="Obrigado, estou indo até aí fazer a retirada."
+            />
 
-              <MessageBubble
-                mine
-                text="Olá Guilherme, cheguei para nossa reunião."
-              />
+            <Divider/>
+            
+            <Text styles={styles.textDate}>
+              1 de Outubro 2020
+            </Text> 
 
-              <MessageBubble
-                mine
-                image={require('../img/opcaoentrega1.png')}
-              />
+            <MessageBubble
+              mine
+              text="Olá Guilherme, cheguei para nossa reunião."
+            />
+            <MessageBubble
+              text="Tudo bem, gentileza entre e aguarde nos bancos, já lhe encontro em alguns minutos."
+            />
 
-              <MessageBubble
-                text={text}
-              />
-            </ScrollView>
+            <Divider/>
 
-          </CardView>
-          
-      </View>
+            <Text styles={styles.textDate}>
+              15 de Outubro 2020
+            </Text> 
+
+            <MessageBubble
+              mine
+              text="Olá Guilherme, cheguei para nossa reunião."
+            />
+
+            <MessageBubble
+              mine
+              image={require('../img/opcaoentrega1.png')}
+            />
+
+            <MessageBubble
+              text={text}
+            />
+          </ScrollView>
+
+        </CardView>
+
+    </View>
+      
     );
 }
 
@@ -118,5 +150,19 @@ const styles = StyleSheet.create({
   text1: {
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  menu: {
+    backgroundColor: '#49a98e',
+    flexDirection: 'row',
+  },
+  icon: {
+    marginLeft: wp(2),
+  },
+  userText: {
+    marginLeft: wp(5),
+    alignContent: 'center',
+    marginTop: wp(2),
+    color: 'white',
+    fontSize: wp(4.6),
   }
 });

@@ -39,14 +39,14 @@ export default class Guests extends Component {
 
   guestList =  () => {
     return( this.state.data.map( (data,i) => { 
-        return( <Picker.Item label={data.name} key={i} value={data.id}  />)} )); // the data.id or data.name will determine what is given to post on parent
+        return( <Picker.Item label={data.name} key={i} value={data.name} color="#4c319e" />)} )); 
   }
 
   render() {
     return (
             <Picker
                 selectedValue={this.state.selectedGuest}
-                style={{ height: 50, width: 270 }}
+                style={styles.pickerStyle}
                 onValueChange={ (value) => ( this.setState({selectedGuest : value}),  this.sendData(value))}>
                 { this.guestList() }
             </Picker>
@@ -55,27 +55,7 @@ export default class Guests extends Component {
 }
 
 const styles = StyleSheet.create({
-  body: {
-    flex: 1,
-    width: '100%',
-    height: '100%',
-    backgroundColor: '#50C3F3',
-    justifyContent: 'center',
-    alignItems: 'center',
-    alignContent: 'center',
-  },
-  employeesList: {
-    width: 220,
-    height: 350,
-    position: 'absolute',
-    left: '30%',
-    top: '25%',
-    backgroundColor: '#FFF',
-    borderRadius: 15,
-  },
-  name: {
-    paddingLeft: 10,
-    paddingTop: 15,
-    fontSize: 20,
+  pickerStyle: {
+    width: '80%',
   },
 });
