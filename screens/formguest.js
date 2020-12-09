@@ -22,6 +22,8 @@ import GuestList from '../components/guests.js';
 
 import EmployeeList from '../components/employees.js';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 export default function FormGuest({ route, navigation }) {
 
   const [date, setDate] = useState(new Date());
@@ -51,22 +53,49 @@ export default function FormGuest({ route, navigation }) {
   }
 
   const onGuessPickedValueChanged = (childData) => {
-      console.log(childData);
-      setGuestPickerSelectedValue(childData);
+    //console.log(childData);
+    setGuestPickerSelectedValue(childData);
   }
 
   const onEmployeePickedValueChanged = (childData) => {
-      console.log(childData);
-      setEmployeePickerSelectedValue(childData);
+    //console.log(childData);
+    setEmployeePickerSelectedValue(childData);
   }
 
-  const handleSubmit = () => {
-    console.log(date);
-    console.log(guestPickerValue);
-    console.log(employeePickerValue);
+  const handleSubmit = async() => {
+    const currentUser = await AsyncStorage.getItem('@App_user');
+    var idUser = JSON.parse(currentUser).user.id;
+    console.log(format(date,'yyyy-MM-dd'));
+    console.log(idUser);
     //showToastWithGravityAndOffset("Visita Salva");
-  }
+    try {
+        const data = {
+          idEmployee: 'd17bb389-3823-4bf2-a318-dc35b2646267',
+          typeVisit: 1,
+          dateVisit: format(date,'yyyy-MM-dd'),
+          idVisitor: '',
+          hourVisit: '12:00:00',
+          status: 1,
+          subs: ['2c413e63-bc38-482a-a68b-cce3b3c8bcf4']
+        }  
 
+        console.log(data);
+
+        const response = await api.post('/api/visits', data);
+
+        //const user = response.data;
+
+        //console.log(user);
+
+        //const message = await showToastWithGravityAndOffset("Cadastro Efetuado Com Sucesso!");
+
+        //clearFields();
+       
+      } catch (_err) {
+        console.log(_err);
+    }
+  }
+ 
   const pressHandlerCalendar = () => {
     console.log("calendario clicado");
     setShow(true);

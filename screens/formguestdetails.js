@@ -1,15 +1,19 @@
 import React, { useState, setState } from 'react';
-import { TouchableOpacity, PixelRatio, Dimensions, StyleSheet, View, TextInput, Text, Button, Image, TouchableWithoutFeedback } from 'react-native';
+import { ToastAndroid, TouchableOpacity, PixelRatio, Dimensions, StyleSheet, View, TextInput, Text, Button, Image, TouchableWithoutFeedback } from 'react-native';
 import {
  heightPercentageToDP as hp,
  widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import CardView from 'react-native-cardview';
 
 import { Divider } from 'react-native-paper';
 
 import Input from '../components/Input';
+
+import api from '../services/api';
 
 export default function FormGuestDetails({ route, navigation }) {
 
@@ -29,16 +33,41 @@ export default function FormGuestDetails({ route, navigation }) {
     setCompany(company);
   };
 
-  const handleSubmit = () => {
-    console.log('submeteu formulário' + ' - ' + name + ' - ' + cpf + ' - ' + company);
-    navigation.navigate('FormGuest', name);
-  }
+  const handleSubmit = async() => {
+    try {
 
-  const clearFields = () => {
-    setUserName('');
-    setEmail('');
-    setPassword('');
-  }
+        const data = {
+          personalCode: cpf,
+          idCompany: 'f556895f-efa3-4428-b6a5-f90dd7e3a94e',
+          name: name,
+          email: 'padrao2@landix.com.br',
+          observation: company
+        }  
+
+        const response = await api.post('/visitors', data);
+
+        const user = response.data;
+
+        console.log(user);
+
+        const message = await showToastWithGravityAndOffset("Cadastro Efetuado Com Sucesso!");
+
+        navigation.navigate('FormGuest', name);
+      
+      } catch (_err) {
+        console.log(_err);
+      }
+  };
+
+  const showToastWithGravityAndOffset = (message) => {
+    ToastAndroid.showWithGravityAndOffset(
+      message,
+      ToastAndroid.LONG,
+      ToastAndroid.BOTTOM,
+      20,
+      30
+    );
+  };
 
   return (
     <View style={styles.body}>
