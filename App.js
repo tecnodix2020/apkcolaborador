@@ -9,6 +9,7 @@ import React, { useEffect } from 'react';
 import { fcmService } from './services/FCMService';
 import { localNotificationService } from './services/LocalNotificationService';
 import Navigator from './routes/homeStack';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function App() {
   useEffect(() => {
@@ -16,8 +17,8 @@ export default function App() {
     fcmService.register(onRegister, onNotification, onOpenNotification)
     localNotificationService.configure(onOpenNotification)
 
-    function onRegister(token) {
-      console.log("[App] onRegister: ", token)
+    async function onRegister(token) {
+      await AsyncStorage.setItem('@fcm_token', token)
     }
 
     function onNotification(notify) {
