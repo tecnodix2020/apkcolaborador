@@ -73,19 +73,18 @@ export default function FormGuest({ route, navigation }) {
           idEmployee: 'd17bb389-3823-4bf2-a318-dc35b2646267',
           typeVisit: 1,
           dateVisit: format(date,'yyyy-MM-dd'),
-          idVisitor: '',
           hourVisit: '12:00:00',
           status: 1,
-          subs: ['2c413e63-bc38-482a-a68b-cce3b3c8bcf4']
+          subs: ['a4216346-9f00-41f8-905e-e4de38d78ffd']
         }  
 
         console.log(data);
 
         const response = await api.post('/api/visits', data);
 
-        //const user = response.data;
+        const user = response.data;
 
-        //console.log(user);
+        console.log(user);
 
         //const message = await showToastWithGravityAndOffset("Cadastro Efetuado Com Sucesso!");
 

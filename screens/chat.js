@@ -16,8 +16,6 @@ import MessageBubble from '../components/MessageBubble';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-import { NavigationActions } from 'react-navigation';
-
 export default function Chat({ navigation }) {
 
   const [text, setTextName] = useState('');
@@ -26,7 +24,7 @@ export default function Chat({ navigation }) {
   const menuIcon = (<Icon name="bars" size={40} color="grey"/>)
 
   const openLeftMenu = () => {
-    navigation.navigate('DrawerOpen');
+    navigation.toggleDrawer();
   }
 
   const getUserLoggedName = async() => {
@@ -43,10 +41,10 @@ export default function Chat({ navigation }) {
   return (
     <View style={styles.body}>
         <View style={styles.menu}>
+            <Text style={styles.userText}>Olá {userLoggedIn}</Text>
             <TouchableOpacity style={styles.icon} onPress={openLeftMenu}>
               {menuIcon}
             </TouchableOpacity>
-            <Text style={styles.userText}>Olá {userLoggedIn}</Text>
         </View>
 
         <CardView
