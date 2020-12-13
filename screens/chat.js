@@ -12,7 +12,7 @@ import FlashMessage from "react-native-flash-message";
 
 import { Divider } from 'react-native-paper';
 
-import MessageBubble from '../components/MessageBubble';
+import MessageBubble from '../components/messagebubble';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 
