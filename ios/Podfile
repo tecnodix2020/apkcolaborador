@@ -79,6 +79,10 @@ target 'SecretariaVirtualTotem' do
 
   pod 'react-native-orientation-locker', :path => '../node_modules/react-native-orientation-locker'
 
+  pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
+
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+
   target 'SecretariaVirtualTotemTests' do
     inherit! :complete
     # Pods for testing

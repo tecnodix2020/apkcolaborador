@@ -1,22 +1,23 @@
-import React, { Component } from 'react';
+import React, { Component, useState, setState, useEffect } from 'react';
 import { StyleSheet, View, Text, Button, Image, TouchableWithoutFeedback, FlatList, SafeAreaView } from 'react-native';
 
 import {Picker} from '@react-native-picker/picker';
 
 import api from '../services/api';
 
-export default class Employee extends Component {
+export default class Guests extends Component {
+
   constructor(props) {
       super(props);
       this.state = {
           data: [],
-          selectedEmployee : "-"
+          selectedGuest : "-"
       }
   }
-
-  loadEmployees = async() => { 
+  
+  loadGuests = async() => { 
     try {
-      var response = await api.get('/employees')
+      var response = await api.get('/visitors');
 
       console.log(response.data);
 
@@ -31,25 +32,25 @@ export default class Employee extends Component {
   }
 
   componentDidMount() {
-      this.loadEmployees();
+      this.loadGuests();
   }
 
   sendData = (value) => {
       this.props.parentCallback(value);
   }
 
-  employeeList =  () => {
+  guestList =  () => {
     return( this.state.data.map( (data,i) => { 
-        return( <Picker.Item label={data.name} key={i} value={data.name} color="#4c319e" />)} ));
+        return( <Picker.Item label={data.name} key={i} value={data.name} color="#4c319e" />)} )); 
   }
 
   render() {
     return (
             <Picker
-                selectedValue={this.state.selectedEmployee}
+                selectedValue={this.state.selectedGuest}
                 style={styles.pickerStyle}
-                onValueChange={ (value) => ( this.setState({selectedEmployee : value}), this.sendData(value))}>
-                { this.employeeList() }
+                onValueChange={ (value) => ( this.setState({selectedGuest : value}),  this.sendData(value))}>
+                { this.guestList() }
             </Picker>
     );
   }
