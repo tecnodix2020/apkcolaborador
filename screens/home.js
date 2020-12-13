@@ -49,7 +49,9 @@ export default function Home({ navigation }) {
     setPassword(password);
   }; 
     
-  const pressHandlerCreate = () => {
+  const pressHandlerCreate = async () => {
+    let test = await AsyncStorage.getItem('@fcm_token')
+    console.log(test)
     navigation.navigate('FormUser');
   }
     
@@ -101,9 +103,12 @@ export default function Home({ navigation }) {
 
         await AsyncStorage.setItem('@App_user', JSON.stringify(user)) // save itens to local storger
 
-        const currentUser = await AsyncStorage.getItem('@App_user') // get data from storage passing key
+        let currentUser = await AsyncStorage.getItem('@App_user') // get data from storage passing key
+        currentUser = JSON.parse(currentUser);
 
-        //console.log(JSON.parse(currentUser).user.name); // feito
+        let fcmToken = await AsyncStorage.getItem('@fcm-token');
+        currentUser.user.appToken = fcmToken;
+        let updatedUser = await api.put(`/users/${currentUser.user.id}`, currentUser.user);
 
         navigation.navigate('Option');
 

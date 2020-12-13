@@ -1,4 +1,4 @@
-package com.secretariavirtualtotem;
+package com.apkcolaborador;
 
 import com.facebook.react.ReactActivity;
 import android.content.Intent;
