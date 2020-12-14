@@ -24,6 +24,8 @@ import EmployeeList from '../components/employees.js';
 
 import Input from '../components/Input';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 export default function FormGuest({ route, navigation }) {
 
   const [date, setDate] = useState(new Date());
@@ -35,16 +37,6 @@ export default function FormGuest({ route, navigation }) {
   const [guestPickerValue, setGuestPickerSelectedValue] = useState('');
   const [employeePickerValue, setEmployeePickerSelectedValue] = useState('');
   const [phone, setPhone] = useState('');
-
-  const showToastWithGravityAndOffset = (message) => {
-    ToastAndroid.showWithGravityAndOffset(
-      message,
-      ToastAndroid.LONG,
-      ToastAndroid.BOTTON,
-      10,
-      20
-    );
-  };
 
   const onChange = (event, selectedDate) => { 
     const currentDate = selectedDate || date;
@@ -63,12 +55,38 @@ export default function FormGuest({ route, navigation }) {
       setEmployeePickerSelectedValue(childData);
   }
 
-  const handleSubmit = () => {
-    console.log(date);
-    console.log(guestPickerValue);
-    console.log(employeePickerValue);
-    //showToastWithGravityAndOffset("Visita Salva");
+  const handleSubmit = async() => {
+    const currentUser = await AsyncStorage.getItem('@App_user');
+    var idUser = JSON.parse(currentUser).user.id;
+    try {
+
+        const data = {
+          idEmployee: idUser,
+          idTypeVisit: 2,
+          dateVisit: format(date,'yyyy-MM-dd'),
+          subs: ['a4216346-9f00-41f8-905e-e4de38d78ffd']
+        }  
+
+        console.log(data);
+
+        const response = await api.post('/api/visits', data);
+
+        //const message = await showToastWithGravityAndOffset("Cadastro Efetuado Com Sucesso!");
+
+      } catch (_err) {
+        console.log(_err);
+      }
   }
+
+  const showToastWithGravityAndOffset = (message) => {
+    ToastAndroid.showWithGravityAndOffset(
+      message,
+      ToastAndroid.LONG,
+      ToastAndroid.BOTTON,
+      10,
+      20
+    );
+  };
 
   const pressHandlerCalendar = () => {
     console.log("calendario clicado");
@@ -119,7 +137,7 @@ export default function FormGuest({ route, navigation }) {
             <Divider/>
 
             <View style={styles.fields}>
-              <Text style={styles.txtCombo}>COLABORADORES ALTERNATIVOS</Text>
+              <Text style={styles.txtCombo}>COLABORADOR ALTERNATIVO</Text>
               <EmployeeList parentCallback = {onEmployeePickedValueChanged} />
             </View>
 

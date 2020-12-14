@@ -70,7 +70,7 @@ export default function FormGuest({ route, navigation }) {
     //showToastWithGravityAndOffset("Visita Salva");
     try {
         const data = {
-          idEmployee: 'd17bb389-3823-4bf2-a318-dc35b2646267',
+          idEmployee: idUser,
           typeVisit: 1,
           dateVisit: format(date,'yyyy-MM-dd'),
           hourVisit: '12:00:00',

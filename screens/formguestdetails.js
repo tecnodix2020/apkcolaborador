@@ -19,6 +19,7 @@ export default function FormGuestDetails({ route, navigation }) {
 
   const [name, setName] = useState('');
   const [cpf, setCPF] = useState('');
+  const [mail, setMail] = useState('');
   const [company, setCompany] = useState('');
 
   const handleNameChange = (name) => {
@@ -32,6 +33,9 @@ export default function FormGuestDetails({ route, navigation }) {
   const handleCompanyChange = (company) => {
     setCompany(company);
   };
+  const handleMailChange = (mail) => {
+    setMail(mail);
+  };
 
   const handleSubmit = async() => {
     try {
@@ -40,22 +44,21 @@ export default function FormGuestDetails({ route, navigation }) {
           personalCode: cpf,
           idCompany: 'f556895f-efa3-4428-b6a5-f90dd7e3a94e',
           name: name,
-          email: 'padrao2@landix.com.br',
+          email: mail,
           observation: company
         }  
 
         const response = await api.post('/visitors', data);
 
-        const user = response.data;
-
-        console.log(user);
-
         const message = await showToastWithGravityAndOffset("Cadastro Efetuado Com Sucesso!");
+
+        this.cleanFields();
 
         navigation.navigate('FormGuest', name);
       
       } catch (_err) {
         console.log(_err);
+        const message = await showToastWithGravityAndOffset("Já há uma cliente com esse e-mail/cpf!");
       }
   };
 
@@ -63,11 +66,18 @@ export default function FormGuestDetails({ route, navigation }) {
     ToastAndroid.showWithGravityAndOffset(
       message,
       ToastAndroid.LONG,
-      ToastAndroid.BOTTOM,
+      ToastAndroid.TOP,
       20,
       30
     );
   };
+
+  const cleanFields = () => {
+    setName('');
+    setCPF('');
+    setCompany('');
+    setMail('');
+  }
 
   return (
     <View style={styles.body}>
@@ -82,6 +92,14 @@ export default function FormGuestDetails({ route, navigation }) {
               value={name}
               textContentType="name"
               onChangeText={handleNameChange}
+            />
+
+            <Divider />
+
+            <Input 
+              label="EMAIL"
+              value={mail}
+              onChangeText={handleMailChange}
             />
 
             <Divider />
@@ -124,7 +142,7 @@ const styles = StyleSheet.create({
   },
   card: {
     width: '90%',
-    marginTop: wp(15),
+    marginTop: wp(10),
     alignItems: 'center',
   },
   button: {
