@@ -60,7 +60,7 @@ export default function Chat({ navigation }) {
   }
   const handleMsg3 = () => { 
     setShowResponse(true);
-    setValueResponse("A equipe Gente foi acionada");
+    setValueResponse("A equipe Gente será acionada");
   }
 
   const send = () => {
