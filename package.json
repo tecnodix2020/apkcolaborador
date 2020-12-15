@@ -1,6 +1,6 @@
 {
-  "name": "secretariavirtualuser",
-  "version": "0.0.1",
+  "name": "recepcionistainteligentecolaborador",
+  "version": "0.8",
   "private": true,
   "scripts": {
     "android": "react-native run-android",
@@ -56,8 +56,9 @@
   "jest": {
     "preset": "react-native"
   },
-  "description": "apk colaborador",
+  "description": "APK COLABORADOR",
   "main": "index.js",
-  "author": "Andre Souto",
-  "license": "MIT"
+  "author": "Andre Souto E Guilherme Ferreira",
+  "license": "MIT",
+  "repository": "https://github.com/tecnodix2020/apkcolaborador.git"
 }
