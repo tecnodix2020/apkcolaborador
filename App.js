@@ -22,7 +22,7 @@ export default function App() {
     }
 
     function onNotification(notify) {
-      console.log("[App] onNotification: ", notify)
+      console.log("[App] onNotification: ", notify.body)
       const options = {
         soundName: 'default',
         playSound: true

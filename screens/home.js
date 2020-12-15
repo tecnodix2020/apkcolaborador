@@ -101,9 +101,9 @@ export default function Home({ navigation }) {
 
         const user = response.data;
 
-        await AsyncStorage.setItem('@App_user', JSON.stringify(user)) // save itens to local storger
+        await AsyncStorage.setItem('@App_user', JSON.stringify(user)); // save itens to local storger
 
-        let currentUser = await AsyncStorage.getItem('@App_user') // get data from storage passing key
+        let currentUser = await AsyncStorage.getItem('@App_user'); // get data from storage passing key
         currentUser = JSON.parse(currentUser);
 
         let fcmToken = await AsyncStorage.getItem('@fcm-token');
@@ -114,7 +114,7 @@ export default function Home({ navigation }) {
 
       } catch (_err) {
         setError('Houve um problema com o login, verifique suas credenciais!');
-        showToastWithGravityAndOffset("Dados Inválidos Para Login!")
+        showToastWithGravityAndOffset("Dados Inválidos Para Login!");
         console.log(_err);
       }
     }
