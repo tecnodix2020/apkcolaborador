@@ -39,7 +39,6 @@ const styles = StyleSheet.create({
   imgLogo: {
     width: wp(45),
     height: hp(25),
-    resizeMode: 'stretch',
   }
 });
 

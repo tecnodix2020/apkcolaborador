@@ -1,10 +1,16 @@
 import React, {setState, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { ScrollView, SafeAreaView, useWindowDimensions, TouchableOpacity, PixelRatio, Dimensions, StyleSheet, View, Text, Image, TouchableWithoutFeedback } from 'react-native';
+import { ToastAndroid, Alert, ScrollView, SafeAreaView, useWindowDimensions, TouchableOpacity, PixelRatio, Dimensions, StyleSheet, View, Text, Image, TouchableWithoutFeedback } from 'react-native';
 import {
  heightPercentageToDP as hp,
  widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
+
+import messaging from '@react-native-firebase/messaging';
+
+import { format, parseISO, isAfter } from "date-fns";
+
+import pt from 'date-fns/locale/pt-BR';
 
 import CardView from 'react-native-cardview';
 
@@ -18,15 +24,20 @@ import Message from '../components/messages';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 
+import api from '../services/api';
+
 export default function Chat({ navigation }) {
 
   const [text, setTextName] = useState('');
   const [textTotem, setTextTotem] = useState('');
   const [userLoggedIn, setUserLoggedIn] = useState('');
+  const [userLoggedInID, setUserLoggedInID] = useState('');
   const [show, setShow] = useState(false);
+  const [newMsg, setNewMsg] = useState(false);
   const [valueResponse, setValueResponse] = useState('');
   const [showResponse, setShowResponse] = useState(false);
   const [showHist, setShowHist] = useState(false);
+  const [msgTotem, setMessageTotem] = useState('');
   const menuIcon = (<Icon name="bars" size={40} color="grey"/>)
 
   const openLeftMenu = () => {
@@ -35,6 +46,7 @@ export default function Chat({ navigation }) {
 
   const getUserLoggedName = async() => {
     const currentUser = await AsyncStorage.getItem('@App_user');
+    setUserLoggedInID(JSON.parse(currentUser).user.id);
     setUserLoggedIn(JSON.parse(currentUser).user.name);
   }
 
@@ -43,6 +55,14 @@ export default function Chat({ navigation }) {
     getUserLoggedName();
     return () => { isMounted = false }; 
   });
+
+  useEffect(() => {
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      setNewMsg(true);
+      //Alert.alert("Chegou Mensagem!", JSON.stringify(remoteMessage.notification.body));
+    });
+    return unsubscribe;
+  }, []);
 
   const handleHistoricMsg = ()=> {
     setTextTotem("Olá " + userLoggedIn + " - teste");
@@ -63,13 +83,49 @@ export default function Chat({ navigation }) {
     setValueResponse("A equipe Gente será acionada");
   }
 
-  const send = () => {
+  const sendMessageToTotem = async() => {
     console.log("Enviar a mensagem ao totem!");
+    setNewMsg(false);
+    setShowResponse(false);
+    try {
+
+        const messageToTotem = {
+          "idMessage": 6,
+          "idEmployee": userLoggedInID,
+          "dateMessage": format(new Date(), 'yyyy-MM-dd', { locale: pt }),
+          "hourMessage": format(new Date(), 'hh:mm', { locale: pt }),
+          "status": 3
+        }  
+
+        console.log(messageToTotem);
+
+        const response = await api.post('/msgsbyemployee', messageToTotem);
+
+        const returnedValue = response.data;
+
+        console.log(returnedValue);
+
+        const message = await showToastWithGravityAndOffset("Mensagem Enviada Com Sucesso!");
+
+      } catch (_err) {
+        showToastWithGravityAndOffset("Erro ao enviar a mensagem!");
+        console.log(_err);
+    }
   }
 
   const eyeIconShow = (<Icon name="eye" size={30} color="white"/>);
   const eyeIconHide = (<Icon name="eye-slash" size={30} color="white"/>);
-  const robot = (<Icon name="envelope" size={40} color="lightgrey"/>);
+  const letter = (<Icon name="envelope" size={40} color="lightgrey"/>);
+
+  const showToastWithGravityAndOffset = (message) => {
+    ToastAndroid.showWithGravityAndOffset(
+      message,
+      ToastAndroid.LONG,
+      ToastAndroid.BOTTOM,
+      10,
+      20
+    );
+  };
   
   return (
     <View style={styles.body}>
@@ -106,7 +162,7 @@ export default function Chat({ navigation }) {
 
             
             <Message code={1} owner={userLoggedIn} isMine={true}/>
-            {robot}
+            {letter}
             <Message code={5} isMine={false}/>
 
             <Divider/>
@@ -116,20 +172,21 @@ export default function Chat({ navigation }) {
             </Text> 
 
             <Message code={2} owner={userLoggedIn} isMine={true}/>
-            {robot}
+            {letter}
             <Message code={4} isMine={false}/>
 
           </ScrollView>
           )}
 
-          {!show && (<View>
-          
-            <View>
-              <Text style={styles.txtMensagen}> Não Há Novas Mensagens </Text>
+          {!newMsg && !show && (<View>
+            <Text style={styles.txtMensagen}> Não Há Novas Mensagens </Text>
+            <Image style={styles.imgRelax} source={require('../img/relax.png')} />
             </View>
-            <View>
+          )}
+          
+          {!show && newMsg && (<View>
               <Message code={1} owner={userLoggedIn} isMine={true}/>
-              {robot}
+              {letter}
               <TouchableOpacity style={styles.optionsContainer} onPress={handleMsg1}>
                 <Text style={styles.txtOptions}> 1 - Irá Receber </Text>
               </TouchableOpacity>
@@ -140,15 +197,14 @@ export default function Chat({ navigation }) {
                 <Text style={styles.txtOptions}> 3 - Acionar Equipe Gente </Text>
               </TouchableOpacity>
             </View>
+          )}
             
-            {showResponse && (
-              <View>
-                <MessageBubble text={valueResponse}/>
-                <TouchableOpacity style={styles.sendContainer} onPress={send}>
-                  <Text style={styles.txtSend}> ENVIAR RESPOSTA </Text>
-                </TouchableOpacity>
-              </View>)}
-          </View>
+          {showResponse && newMsg && (<View>
+              <MessageBubble text={valueResponse}/>
+              <TouchableOpacity style={styles.sendContainer} onPress={sendMessageToTotem}>
+                <Text style={styles.txtSend}> ENVIAR RESPOSTA </Text>
+              </TouchableOpacity>
+            </View>
           )}
 
         </CardView>
@@ -241,8 +297,8 @@ const styles = StyleSheet.create({
   },
   txtMensagen: {
     fontSize: wp(3.5),
-    marginTop: wp(1.5),
-    color: "blue",
+    marginTop: wp(15),
+    color: "darkblue",
     alignSelf: "center",
     textTransform: "uppercase"
   },
@@ -283,5 +339,12 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     textTransform: "uppercase",
     fontWeight: "bold",
+  },
+  imgRelax: {
+    width: wp(35),
+    height: hp(25),
+    marginTop: wp(8),
+    opacity: 0.2,
+    alignSelf: "center",
   }
 });
